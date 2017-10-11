@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.PlaceMapper">
+    <sql id="columnNames">
+        place_code,place_name,place_desc,pk_parent
+    </sql>
+    <sql id="columnValues">
+        #{place_code},#{place_name},#{place_desc},#{pk_parent}
+    </sql>
+    <sql id="ifWhere">
+        <if test="place_code!=null and place_code!=''">
+            and place_code like "%${place_code}%"
+        </if>
+        <if test="place_name != null and place_name !=''">
+            and place_name like "%${place_name}%"
+        </if>
+    </sql>
+    <sql id="ifSet">
+        <if test="place_code != null">place_code=#{place_code},</if>
+        <if test="place_name != null">place_name=#{place_name},</if>
+        <if test="place_desc != null">place_desc=#{place_desc},</if>
+        <if test="pk_parent != null">pk_parent=#{pk_parent},</if>
+    </sql>
+
+    <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.PlaceVO">
+
+    </select>
+    <select id="retrieveAll" resultType="com.houoy.app.smarthealth.vo.PlaceVO">
+        select *,place_name as text from im_place ORDER BY place_code
+    </select>
+
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.PlaceVO" parameterType="java.util.List">
+        select * from im_place where pk_parent in
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from im_place
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.PlaceVO">
+        select * from im_place
+        <where>
+            <include refid="ifWhere"/>
+        </where>
+        order by
+        ${orderColumnName} ${orderDir}
+        limit
+        #{start},#{length}
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.PlaceVO">
+        insert into im_place
+        (<include refid="columnNames"/>)
+        values
+        (<include refid="columnValues"/>)
+    </insert>
+
+    <update id="updateByVO">
+        update im_place
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="ifSet"/>
+        </trim>
+
+        where pk_place=#{pk_place}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from im_place where pk_place=#{pk_place}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from im_place where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_place = #{item}
+        </foreach>
+    </delete>
+
+</mapper>
+

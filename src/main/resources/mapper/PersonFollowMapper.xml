@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.PersonFollowMapper">
+    <sql id="columnNames">
+        pk_relfp,pk_person,follow_pk_person,effective,ts
+    </sql>
+    <sql id="columnValues">
+        #{pk_relfp},#{pk_person},#{follow_pk_person},#{effective},#{ts}
+    </sql>
+    <sql id="ifWhere">
+        <if test="pk_person!=null">
+            and pk_person = ${pk_person}
+        </if>
+    </sql>
+    <sql id="ifSet">
+        <if test="pk_person != null">pk_person=#{pk_person},</if>
+        <if test="follow_pk_person != null">follow_pk_person=#{follow_pk_person},</if>
+        <if test="effective != null">effective=#{effective}</if>
+    </sql>
+    <sql id="tableName">
+        im_person_follow
+    </sql>
+
+    <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO">
+
+    </select>
+    <select id="retrieveAll" resultType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO">
+      
+    </select>
+
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO" parameterType="java.util.List">
+
+    </select>
+
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from <include refid="tableName"/>
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO">
+        select
+        <include refid="columnNames"/>
+        from <include refid="tableName"/>
+        <where>
+            <include refid="ifWhere"/>
+        </where>
+        order by
+        ${orderColumnName} ${orderDir}
+        limit
+        #{start},#{length}
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO">
+        insert into
+        <include refid="tableName"/>
+        (<include refid="columnNames"/>)
+        values
+        (<include refid="columnValues"/>)
+    </insert>
+
+    <update id="updateByVO">
+        update
+        <include refid="tableName"/>
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="ifSet"/>
+        </trim>
+
+        where pk_relfp=#{pk_relfp}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from
+         <include refid="tableName"/>
+        where pk_relfp=#{pk_relfp}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from
+        <include refid="tableName"/>
+
+      where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_relfp = #{item}
+        </foreach>
+    </delete>
+
+</mapper>
+

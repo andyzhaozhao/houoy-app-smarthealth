@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.HobbyMapper">
+    <select id="retrieveByPK" resultType="java.util.Map">
+
+    </select>
+    <select id="retrieveAll" resultType="java.util.Map">
+
+    </select>
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from im_hobby
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.HobbyVO">
+        select * from im_hobby
+        <where>
+            <if test="hobby_code!=null and hobby_code!=''">
+                and hobby_code like "%${hobby_code}%"
+            </if>
+            <if test="hobby_name != null and hobby_name !=''">
+                and hobby_name like "%${hobby_name}%"
+            </if>
+            <if test="hobby_desc != null and hobby_desc !=''">
+                and hobby_desc like "%${hobby_desc}%"
+            </if>
+        </where>
+        order by
+        ${orderColumnName} ${orderDir}
+        limit
+        #{start},#{length}
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.HobbyVO">
+        insert into im_hobby(hobby_code,hobby_name,hobby_desc,pk_person)
+        values
+        (#{hobby_code},#{hobby_name},#{hobby_desc},#{pk_person})
+    </insert>
+
+    <update id="updateByVO">
+        update im_hobby
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hobby_code != null">hobby_code=#{hobby_code},</if>
+            <if test="hobby_name != null">hobby_name=#{hobby_name},</if>
+            <if test="hobby_desc != null">hobby_desc=#{hobby_desc},</if>
+            <if test="pk_person != null">pk_person=#{pk_person}</if>
+        </trim>
+
+        where pk_hobby=#{pk_hobby}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from im_hobby where pk_hobby=#{pk_hobby}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from im_hobby where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_hobby = #{item}
+        </foreach>
+    </delete>
+</mapper>
+

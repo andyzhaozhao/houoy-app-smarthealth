@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.CoinRechargeMapper">
+    <sql id="columnNames">
+        recharge_code,recharge_name,recharge_money,recharge_coin,coin,pk_person,ts
+    </sql>
+    <sql id="columnValues">
+        #{recharge_code},#{recharge_name},#{recharge_money},#{recharge_coin},#{coin},#{pk_person},#{ts}
+    </sql>
+    <sql id="ifWhere">
+        <if test="recharge_code!=null and recharge_code!=''">
+            and recharge_code like "%${recharge_code}%"
+        </if>
+        <if test="recharge_name != null and recharge_name !=''">
+            and recharge_name like "%${recharge_name}%"
+        </if>
+    </sql>
+    <sql id="ifSet">
+        <if test="recharge_code != null">recharge_code=#{recharge_code},</if>
+        <if test="recharge_name != null">recharge_name=#{recharge_name},</if>
+        <if test="recharge_money != null">recharge_money=#{recharge_money},</if>
+        <if test="recharge_coin != null">recharge_coin=#{recharge_coin},</if>
+        <if test="coin != null">coin=#{coin},</if>
+        <if test="pk_person != null">pk_person=#{pk_person},</if>
+    </sql>
+    <sql id="tableName">
+        im_recharge
+    </sql>
+
+    <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.CoinRechargeVO">
+
+    </select>
+    <select id="retrieveAll" resultType="com.houoy.app.smarthealth.vo.CoinRechargeVO">
+        select
+        <include refid="columnNames"/>
+        from
+        <include refid="tableName"/>
+         ORDER BY recharge_code
+    </select>
+
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.CoinRechargeVO" parameterType="java.util.List">
+
+    </select>
+
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from <include refid="tableName"/>
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.CoinRechargeVO">
+        select
+        <include refid="columnNames"/>
+        from <include refid="tableName"/>
+        <where>
+            <include refid="ifWhere"/>
+        </where>
+        order by
+        ${orderColumnName} ${orderDir}
+        limit
+        #{start},#{length}
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.CoinRechargeVO">
+        insert into
+        <include refid="tableName"/>
+        (<include refid="columnNames"/>)
+        values
+        (<include refid="columnValues"/>)
+    </insert>
+
+    <update id="updateByVO">
+        update
+        <include refid="tableName"/>
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="ifSet"/>
+        </trim>
+
+        where pk_recharge=#{pk_recharge}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from
+         <include refid="tableName"/>
+        where pk_recharge=#{pk_recharge}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from
+        <include refid="tableName"/>
+
+      where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_recharge = #{item}
+        </foreach>
+    </delete>
+
+</mapper>
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.PersonMapper">
+    <select id="retrieveByPK" resultType="java.util.Map">
+
+    </select>
+    <select id="retrieveAll" resultType="java.util.Map">
+
+    </select>
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from im_person
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.PersonVO">
+        select * from im_person
+        <where>
+            <if test="person_code!=null and person_code!=''">
+                and person_code like "%${person_code}%"
+            </if>
+            <if test="person_name != null and person_name !=''">
+                and person_name like "%${person_name}%"
+            </if>
+            <if test="person_alias != null and person_alias !=''">
+                and person_alias like "%${person_alias}%"
+            </if>
+            <if test="mobile != null and mobile !=''">
+                and mobile like "%${mobile}%"
+            </if>
+        </where>
+        order by
+        ${orderColumnName} ${orderDir}
+        limit
+        #{start},#{length}
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.PersonVO">
+        insert into im_person(person_code,person_alias,person_name,password,mobile)
+        values
+        (#{person_code},#{person_alias},#{person_name},#{password},#{mobile})
+    </insert>
+
+    <update id="updateByVO">
+        update im_person
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="person_code != null">person_code=#{person_code},</if>
+            <if test="person_name != null">person_name=#{person_name},</if>
+            <if test="person_alias!= null">person_alias=#{person_alias},</if>
+            <if test="password != null">password=#{password},</if>
+            <if test="mobile != null">mobile=#{mobile}</if>
+        </trim>
+
+        where pk_person=#{pk_person}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from im_person where pk_person=#{pk_person}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from im_person where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_person = #{item}
+        </foreach>
+    </delete>
+
+    <update id="updatePortraitByPK">
+        update im_person set portrait = #{portrait}
+
+        where pk_person=#{pk_person}
+    </update>
+
+    <select id="retrievePortrait" resultType="com.houoy.app.smarthealth.vo.PersonVO">
+        select portrait from im_person where pk_person=#{pk_person}
+    </select>
+</mapper>
+

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.PersonNoteMapper">
+    <sql id="columnNames">
+        pk_note,note_code,note_alias,note_name,note_desc,auth,indicator1,indicator2,indicator3,indicator4
+        ,indicator5,pk_person,img1,img2,img3,ts
+    </sql>
+    <sql id="columnValues">
+        #{pk_note},#{note_code},#{note_alias},#{note_name},,#{note_desc},#{auth},#{indicator1},#{indicator2}
+        ,#{indicator3},#{indicator4},#{indicator5},#{pk_person},#{img1},#{img2},#{img3},#{ts}
+    </sql>
+    <sql id="ifWhere">
+        <if test="note_code!=null and note_code!=''">
+            and note_code like "%${note_code}%"
+        </if>
+        <if test="note_alias!=null and note_alias!=''">
+            and note_alias like "%${note_alias}%"
+        </if>
+        <if test="note_name != null and note_name !=''">
+            and note_name like "%${note_name}%"
+        </if>
+        <if test="note_desc != null and note_desc !=''">
+            and note_desc like "%${note_desc}%"
+        </if>
+        <if test="auth != null and auth !=''">
+            and auth like "%${auth}%"
+        </if>
+        <if test="indicator1 != null and indicator1 !=''">
+            and indicator1 like "%${indicator1}%"
+        </if>
+        <if test="pk_person != null and pk_person !=''">
+            and pk_person like "%${pk_person}%"
+        </if>
+    </sql>
+    <sql id="ifSet">
+        <if test="note_code != null">note_code=#{note_code},</if>
+        <if test="note_alias != null">note_alias=#{note_alias},</if>
+        <if test="note_name != null">note_name=#{note_name}</if>
+        <if test="note_desc != null">note_desc=#{note_desc}</if>
+        <if test="auth != null">auth=#{auth}</if>
+        <if test="indicator1 != null">indicator1=#{indicator1}</if>
+        <if test="indicator2 != null">indicator2=#{indicator2}</if>
+        <if test="indicator3 != null">indicator3=#{indicator3}</if>
+        <if test="indicator4 != null">indicator4=#{indicator4}</if>
+        <if test="indicator5 != null">indicator5=#{indicator5}</if>
+        <if test="pk_person != null">pk_person=#{pk_person}</if>
+        <if test="img1 != null">img1=#{img1}</if>
+        <if test="img2 != null">img2=#{img2}</if>
+        <if test="img3 != null">img3=#{img3}</if>
+    </sql>
+    <sql id="tableName">
+        im_person_note
+    </sql>
+
+    <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.PersonNoteVO">
+
+    </select>
+    <select id="retrieveAll" resultType="com.houoy.app.smarthealth.vo.PersonNoteVO">
+      
+    </select>
+
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.PersonNoteVO" parameterType="java.util.List">
+
+    </select>
+
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from <include refid="tableName"/>
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.PersonNoteVO">
+        select
+        <include refid="columnNames"/>
+        from <include refid="tableName"/>
+        <where>
+            <include refid="ifWhere"/>
+        </where>
+        order by
+        ${orderColumnName} ${orderDir}
+        limit
+        #{start},#{length}
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.PersonNoteVO">
+        insert into
+        <include refid="tableName"/>
+        (<include refid="columnNames"/>)
+        values
+        (<include refid="columnValues"/>)
+    </insert>
+
+    <update id="updateByVO">
+        update
+        <include refid="tableName"/>
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="ifSet"/>
+        </trim>
+
+        where pk_note=#{pk_note}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from
+         <include refid="tableName"/>
+        where pk_note=#{pk_note}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from
+        <include refid="tableName"/>
+
+      where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_note = #{item}
+        </foreach>
+    </delete>
+
+</mapper>
+
