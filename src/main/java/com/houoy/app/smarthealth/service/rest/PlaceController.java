@@ -5,13 +5,13 @@ import com.houoy.app.smarthealth.vo.PlaceVO;
 import com.houoy.common.vo.RequestResultVO;
 import com.houoy.common.vo.TreeVO;
 import com.houoy.common.web.BaseController;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,15 +30,20 @@ public class PlaceController extends BaseController<PlaceVO, PlaceService> {
         service = _service;
     }
 
-    @ResponseBody
-    @RequestMapping("/save")
-    @Override
+    @ApiOperation(value = "保存地址")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "vo", value = "地址VO", required = true, dataType = "PlaceVO", paramType = "body")
+    })
+    @PostMapping("/save")
     public RequestResultVO add(@RequestBody PlaceVO vo) {
         return super.add(vo);
     }
 
-    @ResponseBody
-    @RequestMapping("/delete")
+    @ApiOperation(value = "根据Pk值删除", notes = "根据Pk值删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pks", value = "地址的pk列表", required = true, dataType = "List", paramType = "body")
+    })
+    @PostMapping("/delete")
     public RequestResultVO delete(@RequestBody List<String> pks) {
         RequestResultVO resultVO = new RequestResultVO();
         List<PlaceVO> essayTypeVOs = service.retrieveByParentPK(pks);
@@ -60,8 +65,8 @@ public class PlaceController extends BaseController<PlaceVO, PlaceService> {
         return resultVO;
     }
 
-    @ResponseBody
-    @RequestMapping(value = "retrieve")
+    @ApiOperation(value = "获取地址列表树")
+    @GetMapping(value = "retrieve")
     public RequestResultVO retrieve() throws Exception {
         List<PlaceVO> essayTypeVOs = service.retrieveAll();
         TreeVO tree = TreeVO.listToTreeNode(essayTypeVOs);
@@ -77,6 +82,9 @@ public class PlaceController extends BaseController<PlaceVO, PlaceService> {
 
         return resultVO;
     }
+
+
+
 }
 
 

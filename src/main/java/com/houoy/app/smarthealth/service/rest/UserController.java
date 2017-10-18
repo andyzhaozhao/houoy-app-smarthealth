@@ -24,7 +24,6 @@ import java.util.List;
 public class UserController {
     private static final Log logger = LogFactory.getLog(UserController.class);
 
-
     @Resource
     private UserService userService;
 
