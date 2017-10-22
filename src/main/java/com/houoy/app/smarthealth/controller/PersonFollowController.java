@@ -1,7 +1,7 @@
-package com.houoy.app.smarthealth.service.rest;
+package com.houoy.app.smarthealth.controller;
 
-import com.houoy.app.smarthealth.service.CoinRechargeService;
-import com.houoy.app.smarthealth.vo.CoinRechargeVO;
+import com.houoy.app.smarthealth.service.PersonFollowService;
+import com.houoy.app.smarthealth.vo.RelationFollowPersonVO;
 import com.houoy.common.vo.JquryDataTablesVO;
 import com.houoy.common.vo.RequestResultVO;
 import com.houoy.common.web.BaseController;
@@ -20,20 +20,20 @@ import java.util.List;
  * @author andyzhao
  */
 @RestController
-@RequestMapping("/api/coinRecharge")
-public class CoinRechargeController extends BaseController<CoinRechargeVO, CoinRechargeService> {
-    private static final Log logger = LogFactory.getLog(CoinRechargeController.class);
+@RequestMapping("/api/follow")
+public class PersonFollowController extends BaseController<RelationFollowPersonVO, PersonFollowService> {
+    private static final Log logger = LogFactory.getLog(PersonFollowController.class);
 
     @Override
     @Autowired
-    protected void setService(CoinRechargeService _service) {
+    protected void setService(PersonFollowService _service) {
         service = _service;
     }
 
     @ResponseBody
     @RequestMapping("/save")
     @Override
-    public RequestResultVO add(@RequestBody CoinRechargeVO vo) {
+    public RequestResultVO add(@RequestBody RelationFollowPersonVO vo) {
         return super.add(vo);
     }
 
@@ -47,7 +47,7 @@ public class CoinRechargeController extends BaseController<CoinRechargeVO, CoinR
     @ResponseBody
     @RequestMapping(value = "retrieve")
     @Override
-    public JquryDataTablesVO<CoinRechargeVO> retrieve(CoinRechargeVO vo, HttpServletRequest request) {
+    public JquryDataTablesVO<RelationFollowPersonVO> retrieve(RelationFollowPersonVO vo, HttpServletRequest request) {
         return super.retrieve(vo, request);
     }
 }

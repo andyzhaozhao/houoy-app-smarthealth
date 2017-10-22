@@ -25,6 +25,10 @@ public interface LoginMapper {
 
     List<UserVO> retrieveByCodeAndPwd(@Param("code") String code, @Param("password") String password) throws RuntimeException;
 
+    List<UserVO> retrieveByMobileAndPwd(@Param("mobile") String mobile, @Param("password") String password) throws RuntimeException;
+
+    List<UserVO> retrieveByEmailAndPwd(@Param("email") String email, @Param("password") String password) throws RuntimeException;
+
     List<UserVO> retrieveByCode(@Param("code") String code) throws RuntimeException;
 
 }

@@ -1,7 +1,7 @@
-package com.houoy.app.smarthealth.service.rest;
+package com.houoy.app.smarthealth.controller;
 
-import com.houoy.app.smarthealth.service.HobbyService;
-import com.houoy.app.smarthealth.vo.HobbyVO;
+import com.houoy.app.smarthealth.service.CoinRechargeService;
+import com.houoy.app.smarthealth.vo.CoinRechargeVO;
 import com.houoy.common.vo.JquryDataTablesVO;
 import com.houoy.common.vo.RequestResultVO;
 import com.houoy.common.web.BaseController;
@@ -20,20 +20,20 @@ import java.util.List;
  * @author andyzhao
  */
 @RestController
-@RequestMapping("/api/hobby")
-public class HobbyController extends BaseController<HobbyVO, HobbyService> {
-    private static final Log logger = LogFactory.getLog(HobbyController.class);
+@RequestMapping("/api/coinRecharge")
+public class CoinRechargeController extends BaseController<CoinRechargeVO, CoinRechargeService> {
+    private static final Log logger = LogFactory.getLog(CoinRechargeController.class);
 
     @Override
     @Autowired
-    protected void setService(HobbyService _service) {
+    protected void setService(CoinRechargeService _service) {
         service = _service;
     }
 
     @ResponseBody
     @RequestMapping("/save")
     @Override
-    public RequestResultVO add(@RequestBody HobbyVO vo) {
+    public RequestResultVO add(@RequestBody CoinRechargeVO vo) {
         return super.add(vo);
     }
 
@@ -47,7 +47,7 @@ public class HobbyController extends BaseController<HobbyVO, HobbyService> {
     @ResponseBody
     @RequestMapping(value = "retrieve")
     @Override
-    public JquryDataTablesVO<HobbyVO> retrieve(HobbyVO vo, HttpServletRequest request) {
+    public JquryDataTablesVO<CoinRechargeVO> retrieve(CoinRechargeVO vo, HttpServletRequest request) {
         return super.retrieve(vo, request);
     }
 }

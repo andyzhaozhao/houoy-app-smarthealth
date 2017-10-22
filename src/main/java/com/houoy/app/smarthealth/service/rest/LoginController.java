@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,6 @@ import java.util.List;
  * @author andyzhao
  *         spring boot
  */
-//@RestController("/api/login/")
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
@@ -85,30 +85,41 @@ public class LoginController {
             @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
     })
     @PostMapping("/signinMobile")
-    public RequestResultVO signinMobile(HttpServletRequest request, @RequestBody UserVO userVO) throws IOException {
-        String user_code = request.getParameter(UserVO.USERCODE);
-        String password = request.getParameter(UserVO.PASSWORD);
+    public RequestResultVO signinMobile(@RequestBody UserVO userVO) throws IOException {
         RequestResultVO resultVO = new RequestResultVO();
 
-        if (user_code == null || user_code.trim().equals("") || password == null || password.trim().equals("")) {
+        String user_password = userVO.getUser_password();
+        String user_code = userVO.getUser_code();
+        String user_mobile = userVO.getMobile();
+        String user_email = userVO.getEmail();
+        if (StringUtils.isEmpty(user_password)) {
             resultVO.setSuccess(false);
-            resultVO.setMsg("登录失败，请检查用户名和密码");
+            resultVO.setMsg("请输入密码");
+        }
+        List<UserVO> users = null;
+        if (!StringUtils.isEmpty(user_mobile)) {
+            users = loginService.retrieveByMobileAndPwd(user_mobile, user_password);
+        } else if (!StringUtils.isEmpty(user_email)) {
+            users = loginService.retrieveByEmailAndPwd(user_email, user_password);
+        } else if (!StringUtils.isEmpty(user_code)) {
+            users = loginService.retrieveByCodeAndPwd(user_code, user_password);
         } else {
-            List<UserVO> users = loginService.retrieveByCodeAndPwd(user_code, password);
-            if (users != null && users.size() > 0) {
-                if (users.size() > 1) {
-                    throw new AppLoginException("系统内容不错误，找到多个用户");
-                } else {
-                    resultVO.setSuccess(true);
-                    resultVO.setMsg("查询成功");
-                    resultVO.setResultData(users.get(0));
-                }
-            } else {
-                resultVO.setSuccess(false);
-                resultVO.setMsg("登录失败，请检查用户名和密码");
-            }
+            resultVO.setSuccess(false);
+            resultVO.setMsg("请输入手机号/邮箱/用户编码");
         }
 
+        if (users != null && users.size() > 0) {
+            if (users.size() > 1) {
+                throw new AppLoginException("系统内容不错误，找到多个用户");
+            } else {
+                resultVO.setSuccess(true);
+                resultVO.setMsg("查询成功");
+                resultVO.setResultData(users.get(0));
+            }
+        } else {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("登录失败，找不到用户，请检查用户名和密码");
+        }
         return resultVO;
     }
 

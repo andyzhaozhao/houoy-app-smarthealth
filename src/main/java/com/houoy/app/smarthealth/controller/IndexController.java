@@ -1,4 +1,4 @@
-package com.houoy.app.smarthealth.service.rest;
+package com.houoy.app.smarthealth.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

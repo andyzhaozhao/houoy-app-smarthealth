@@ -8,6 +8,12 @@
     <select id="retrieveByCodeAndPwd" resultType="com.houoy.common.vo.UserVO">
         select * from sm_user WHERE user_password = #{password} and user_code = #{code}
     </select>
+    <select id="retrieveByMobileAndPwd" resultType="com.houoy.common.vo.UserVO">
+        select * from sm_user WHERE user_password = #{password} and mobile = #{mobile}
+    </select>
+    <select id="retrieveByEmailAndPwd" resultType="com.houoy.common.vo.UserVO">
+        select * from sm_user WHERE user_password = #{password} and email = #{email}
+    </select>
     <select id="retrieveByCode" resultType="com.houoy.common.vo.UserVO">
         select * from sm_user WHERE user_code = #{code}
     </select>

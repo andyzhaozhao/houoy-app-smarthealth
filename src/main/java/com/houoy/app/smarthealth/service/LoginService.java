@@ -11,4 +11,8 @@ public interface LoginService {
     Integer retrieveAllCount() throws RuntimeException;
 
     List<UserVO> retrieveByCodeAndPwd(String code, String password) throws RuntimeException;
+
+    List<UserVO> retrieveByEmailAndPwd(String email, String password) throws RuntimeException;
+
+    List<UserVO> retrieveByMobileAndPwd(String mobile, String password) throws RuntimeException;
 }

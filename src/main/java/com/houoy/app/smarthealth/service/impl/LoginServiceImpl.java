@@ -34,4 +34,14 @@ public class LoginServiceImpl implements LoginService {
         return loginMapper.retrieveByCodeAndPwd(code, encrypted_password);
     }
 
+    public List<UserVO> retrieveByEmailAndPwd(String email, String password) throws RuntimeException {
+        String encrypted_password = Encode.encode(password);
+        return loginMapper.retrieveByEmailAndPwd(email, encrypted_password);
+    }
+
+    public List<UserVO> retrieveByMobileAndPwd(String mobile, String password) throws RuntimeException {
+        String encrypted_password = Encode.encode(password);
+        return loginMapper.retrieveByMobileAndPwd(mobile, encrypted_password);
+    }
+
 }
