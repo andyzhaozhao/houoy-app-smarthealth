@@ -1,16 +1,16 @@
-package com.houoy.app.smarthealth.controller;
+package com.houoy.app.smarthealth.service.rest;
 
 import com.houoy.app.smarthealth.service.UserService;
 import com.houoy.common.utils.JqueryDataTablesUtil;
 import com.houoy.common.vo.JquryDataTablesVO;
 import com.houoy.common.vo.RequestResultVO;
 import com.houoy.common.vo.UserVO;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +27,12 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @ApiOperation(value = "保存用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
+    })
     @ResponseBody
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public RequestResultVO add(@RequestBody UserVO userVO) {
         Integer num = 0;
         RequestResultVO resultVO = new RequestResultVO();
@@ -54,8 +58,12 @@ public class UserController {
         return resultVO;
     }
 
+    @ApiOperation(value = "根据Pk值删除", notes = "根据Pk值删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pks", value = "用户的pk列表", required = true, dataType = "List", paramType = "body")
+    })
     @ResponseBody
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     public RequestResultVO delete(@RequestBody List<String> pk_users) {
         Integer num = userService.deleteUsers(pk_users);
         RequestResultVO resultVO = new RequestResultVO();
@@ -71,8 +79,12 @@ public class UserController {
         return resultVO;
     }
 
+    @ApiOperation(value = "分页查询用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
+    })
     @ResponseBody
-    @RequestMapping(value = "retrieve")
+    @GetMapping(value = "retrieve")
     public JquryDataTablesVO<UserVO> retrieve(UserVO vo, HttpServletRequest request) {
 
         String orderColumnIndex = request.getParameter("order[0][column]");
@@ -87,8 +99,12 @@ public class UserController {
         return rtv;
     }
 
+    @ApiOperation(value = "更新用户角色")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
+    })
     @ResponseBody
-    @RequestMapping(value = "updateUserRole")
+    @PostMapping(value = "updateUserRole")
     public RequestResultVO updateUserRole(UserVO vo, HttpServletRequest request) {
 
         String pk_user = request.getParameter("pk_user");
