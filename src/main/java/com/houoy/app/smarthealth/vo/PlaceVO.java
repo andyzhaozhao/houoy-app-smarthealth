@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlaceVO extends TreeVO<PlaceVO> {
 
+    @ApiModelProperty(required = false)
     private String pk_place;
     @ApiModelProperty(value = "地址编码",example = "userid",required = true)
     private String place_code;

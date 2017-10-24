@@ -35,14 +35,14 @@
         LEFT JOIN im_person b on a.pk_person = b.pk_person
         LEFT JOIN im_person c on a.follow_pk_person = c.pk_person
         <where>
-            <if test="person_name!=null">
+            <if test="person_name!=null and person_name!=''">
                 and b.person_name like "%${person_name}%"
             </if>
-            <if test="follow_person_name!=null">
-                and c.follow_person_name like"%${follow_person_name}%"
+            <if test="follow_person_name!=null and follow_person_name!=''">
+                and c.person_name like "%${follow_person_name}%"
             </if>
         </where>
-        <if test="orderColumnName != null and orderDir !=''and start !='' and length !=''" >
+        <if test="orderColumnName != null and orderDir !='' and start !='' and length !=''" >
             order by
             ${orderColumnName} ${orderDir}
             limit
