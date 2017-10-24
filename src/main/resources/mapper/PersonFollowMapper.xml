@@ -42,10 +42,12 @@
         <where>
             <include refid="ifWhere"/>
         </where>
-        order by
-        ${orderColumnName} ${orderDir}
-        limit
-        #{start},#{length}
+        <if test="orderColumnName != null and orderDir !=''and start !='' and length !=''" >
+            order by
+            ${orderColumnName} ${orderDir}
+            limit
+            #{start},#{length}
+        </if>
     </select>
 
     <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO">

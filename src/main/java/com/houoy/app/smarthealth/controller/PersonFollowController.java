@@ -20,7 +20,7 @@ import java.util.List;
  * @author andyzhao
  */
 @RestController
-@RequestMapping("/api/follow")
+@RequestMapping("/api/personFollow")
 public class PersonFollowController extends BaseController<RelationFollowPersonVO, PersonFollowService> {
     private static final Log logger = LogFactory.getLog(PersonFollowController.class);
 

@@ -1,4 +1,4 @@
-package com.houoy.app.smarthealth.service.rest;
+package com.houoy.app.smarthealth.controller;
 
 import com.houoy.app.smarthealth.service.UserService;
 import com.houoy.common.utils.JqueryDataTablesUtil;
@@ -121,5 +121,3 @@ public class UserController {
 
 
 }
-
-

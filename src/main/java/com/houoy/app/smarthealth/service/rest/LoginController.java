@@ -2,6 +2,8 @@ package com.houoy.app.smarthealth.service.rest;
 
 import com.houoy.app.smarthealth.config.WebSecurityConfig;
 import com.houoy.app.smarthealth.service.LoginService;
+import com.houoy.app.smarthealth.service.PersonService;
+import com.houoy.app.smarthealth.vo.PersonVO;
 import com.houoy.common.exception.AppLoginException;
 import com.houoy.common.vo.RequestResultVO;
 import com.houoy.common.vo.SessionRootUserVO;
@@ -31,6 +33,9 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private PersonService personService;
 
     @ApiOperation(value = "登录")
     @ApiImplicitParams({
@@ -80,12 +85,12 @@ public class LoginController {
         return mes;
     }*/
 
-    @ApiOperation(value = "手机登录")
+    @ApiOperation(value = "手机系统用户登录")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
     })
-    @PostMapping("/signinMobile")
-    public RequestResultVO signinMobile(@RequestBody UserVO userVO) throws IOException {
+    @PostMapping("/signinSystemMobile")
+    public RequestResultVO signinSystemMobile(@RequestBody UserVO userVO) throws IOException {
         RequestResultVO resultVO = new RequestResultVO();
 
         String user_password = userVO.getUser_password();
@@ -129,6 +134,47 @@ public class LoginController {
         // 移除session
         session.removeAttribute(WebSecurityConfig.Default_Session_Key);
         return "redirect:/login";
+    }
+
+    @ApiOperation(value = "手机社交用户登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "personVO", value = "社交用户信息", required = true, paramType = "body", dataType = "PersonVO")
+    })
+    @PostMapping("/signinMobile")
+    public RequestResultVO signinMobile(@RequestBody PersonVO personVO) throws IOException {
+        RequestResultVO resultVO = new RequestResultVO();
+
+        String user_password = personVO.getPassword();
+        String user_code = personVO.getPerson_code();
+        String user_mobile = personVO.getMobile();
+        String user_email = personVO.getEmail();
+
+        if (StringUtils.isEmpty(user_password)) {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("请输入密码");
+        }
+
+        List<PersonVO> users = null;
+        if (!StringUtils.isEmpty(user_mobile) || !StringUtils.isEmpty(user_email) || !StringUtils.isEmpty(user_code)) {
+            users = personService.retrieveAllWithPage(personVO);
+        } else {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("请输入手机号/邮箱/用户编码");
+        }
+
+        if (users != null && users.size() > 0) {
+            if (users.size() > 1) {
+                throw new AppLoginException("系统内容不错误，找到多个用户");
+            } else {
+                resultVO.setSuccess(true);
+                resultVO.setMsg("查询成功");
+                resultVO.setResultData(users.get(0));
+            }
+        } else {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("登录失败，找不到用户，请检查用户名和密码");
+        }
+        return resultVO;
     }
 }
 

@@ -1,16 +1,16 @@
-package com.houoy.app.smarthealth.controller;
+package com.houoy.app.smarthealth.service.rest;
 
 import com.houoy.app.smarthealth.service.PersonService;
 import com.houoy.app.smarthealth.vo.PersonVO;
 import com.houoy.common.utils.JqueryDataTablesUtil;
 import com.houoy.common.vo.JquryDataTablesVO;
 import com.houoy.common.vo.RequestResultVO;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -36,8 +36,12 @@ public class PersonController {
     @Resource
     private PersonService personService;
 
+    @ApiOperation(value = "保存用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "vo", value = "用户信息", required = true, paramType = "body", dataType = "PersonVO")
+    })
     @ResponseBody
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public RequestResultVO add(@RequestBody PersonVO vo) {
         Integer num = 0;
         RequestResultVO resultVO = new RequestResultVO();
@@ -63,8 +67,13 @@ public class PersonController {
         return resultVO;
     }
 
+
+    @ApiOperation(value = "根据Pk值删除", notes = "根据Pk值删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pks", value = "用户的pk列表", required = true, dataType = "List", paramType = "body")
+    })
     @ResponseBody
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     public RequestResultVO delete(@RequestBody List<String> pks) {
         Integer num = personService.deleteByPK(pks);
         RequestResultVO resultVO = new RequestResultVO();
@@ -80,8 +89,12 @@ public class PersonController {
         return resultVO;
     }
 
+    @ApiOperation(value = "分页查询用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "vo", value = "用户信息", required = true, paramType = "body", dataType = "PersonVO")
+    })
     @ResponseBody
-    @RequestMapping(value = "retrieve")
+    @GetMapping(value = "retrieve")
     public JquryDataTablesVO<PersonVO> retrieve(PersonVO vo, HttpServletRequest request) {
         vo = (PersonVO) JqueryDataTablesUtil.filterParam(vo, request);
         List<PersonVO> result = personService.retrieveAllWithPage(vo);
@@ -90,8 +103,9 @@ public class PersonController {
         return rtv;
     }
 
-    @RequestMapping("/upload")
+    @ApiOperation(value = "上传用户头像")
     @ResponseBody
+    @PostMapping("/upload")
     public RequestResultVO upload(HttpServletRequest request) throws IOException {
         RequestResultVO resultVO = new RequestResultVO();
         Map aa = request.getParameterMap();
@@ -121,7 +135,11 @@ public class PersonController {
         return resultVO;
     }
 
-    @RequestMapping("/portrait")
+    @ApiOperation(value = "获取用户头像")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pk", value = "用户信息", required = true, paramType = "query", dataType = "string")
+    })
+    @GetMapping("/portrait")
     public RequestResultVO portrait(String pk,HttpServletResponse response) throws IOException {
         RequestResultVO rs = personService.retrievePortrait(pk);
         if(rs.getSuccess()){
