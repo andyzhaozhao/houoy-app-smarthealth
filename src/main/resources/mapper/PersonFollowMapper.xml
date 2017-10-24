@@ -7,11 +7,6 @@
     <sql id="columnValues">
         #{pk_relfp},#{pk_person},#{follow_pk_person},#{effective},#{ts}
     </sql>
-    <sql id="ifWhere">
-        <if test="pk_person!=null">
-            and pk_person = ${pk_person}
-        </if>
-    </sql>
     <sql id="ifSet">
         <if test="pk_person != null">pk_person=#{pk_person},</if>
         <if test="follow_pk_person != null">follow_pk_person=#{follow_pk_person},</if>
@@ -36,11 +31,16 @@
         select count(*) from <include refid="tableName"/>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO">
-        select
-        <include refid="columnNames"/>
-        from <include refid="tableName"/>
+        SELECT a.*,b.person_name ,c.person_name as follow_person_name FROM im_person_follow a
+        LEFT JOIN im_person b on a.pk_person = b.pk_person
+        LEFT JOIN im_person c on a.follow_pk_person = c.pk_person
         <where>
-            <include refid="ifWhere"/>
+            <if test="person_name!=null">
+                and b.person_name like "%${person_name}%"
+            </if>
+            <if test="follow_person_name!=null">
+                and c.follow_person_name like"%${follow_person_name}%"
+            </if>
         </where>
         <if test="orderColumnName != null and orderDir !=''and start !='' and length !=''" >
             order by
