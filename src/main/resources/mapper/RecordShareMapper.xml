@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.RecordShareMapper">
+    <sql id="columnNames">
+        record_share_code,record_share_name,pk_person,person_name,
+        record_share_desc
+    </sql>
+    <sql id="columnValues">
+        #{record_share_code},#{record_share_name},#{pk_person},#{person_name},
+        #{record_share_desc}
+    </sql>
+    <sql id="ifWhere">
+        <if test="record_share_code!=null and record_share_code!=''">
+            and record_share_code like "%${record_share_code}%"
+        </if>
+        <if test="record_share_name != null and record_share_name !=''">
+            and record_share_name like "%${record_sport_name}%"
+        </if>
+        <if test="person_name != null and person_name !=''">
+            and person_name like "%${person_name}%"
+        </if>
+    </sql>
+    <sql id="ifSet">
+        <if test="record_share_code != null">record_share_code=#{record_share_code},</if>
+        <if test="record_share_name != null">record_share_name=#{record_share_name},</if>
+        <if test="pk_person != null">pk_person=#{pk_person},</if>
+        <if test="person_name != null">person_name=#{person_name},</if>
+
+        <if test="record_share_desc != null">record_share_desc=#{record_share_desc},</if>
+    </sql>
+
+    <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.RecordShareVO">
+
+    </select>
+    <select id="retrieveAll" resultType="com.houoy.app.smarthealth.vo.RecordShareVO">
+        select * from record_share ORDER BY record_share_code
+    </select>
+
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.RecordShareVO" parameterType="java.util.List">
+
+    </select>
+
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from record_share
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RecordShareVO">
+        select * from record_share
+        <where>
+            <include refid="ifWhere"/>
+        </where>
+        <if test="orderColumnName != null and orderDir !='' and start !='' and length !=''" >
+            order by
+            ${orderColumnName} ${orderDir}
+            limit
+            #{start},#{length}
+        </if>
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.RecordShareVO">
+        insert into record_share
+        (<include refid="columnNames"/>)
+        values
+        (<include refid="columnValues"/>)
+    </insert>
+
+    <update id="updateByVO">
+        update record_share
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="ifSet"/>
+        </trim>
+
+        where pk_record_share=#{pk_record_share}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from record_share where pk_record_share=#{pk_record_share}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from record_share where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_record_share = #{item}
+        </foreach>
+    </delete>
+
+</mapper>
+

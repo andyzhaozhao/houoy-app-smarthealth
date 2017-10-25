@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.RecordVRSportMapper">
+    <sql id="columnNames">
+        record_sport_code,record_sport_name,pk_person,person_name,
+        pk_place,place_name,pk_video,video_name,
+        time_start,time_end,time_length,heart_rate,
+        heart_rate_max,calorie
+    </sql>
+    <sql id="columnValues">
+        #{record_sport_code},#{record_sport_name},#{pk_person},#{person_name},
+        #{pk_place},#{place_name},#{pk_video},#{video_name},
+        #{time_start},#{time_end},#{time_length},#{heart_rate},
+        #{heart_rate_max},#{calorie}
+    </sql>
+    <sql id="ifWhere">
+        <if test="record_sport_code!=null and record_sport_code!=''">
+            and record_sport_code like "%${record_sport_code}%"
+        </if>
+        <if test="record_sport_name != null and record_sport_name !=''">
+            and record_sport_name like "%${record_sport_name}%"
+        </if>
+        <if test="person_name != null and person_name !=''">
+            and person_name like "%${person_name}%"
+        </if>
+        <if test="video_name != null and video_name !=''">
+            and video_name like "%${video_name}%"
+        </if>
+    </sql>
+    <sql id="ifSet">
+        <if test="record_sport_code != null">record_sport_code=#{record_sport_code},</if>
+        <if test="record_sport_name != null">record_sport_name=#{record_sport_name},</if>
+        <if test="pk_person != null">pk_person=#{pk_person},</if>
+        <if test="person_name != null">person_name=#{person_name},</if>
+
+        <if test="pk_place != null">pk_place=#{pk_place},</if>
+        <if test="place_name != null">place_name=#{place_name},</if>
+        <if test="pk_video != null">pk_video=#{pk_video},</if>
+        <if test="video_name != null">video_name=#{video_name},</if>
+
+        <if test="time_start != null">time_start=#{time_start},</if>
+        <if test="time_end != null">time_end=#{time_end},</if>
+        <if test="time_length != null">time_length=#{time_length},</if>
+        <if test="heart_rate != null">heart_rate=#{heart_rate},</if>
+
+        <if test="heart_rate_max != null">heart_rate_max=#{heart_rate_max},</if>
+        <if test="calorie != null">calorie=#{calorie},</if>
+    </sql>
+
+    <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.RecordVRSportVO">
+
+    </select>
+    <select id="retrieveAll" resultType="com.houoy.app.smarthealth.vo.RecordVRSportVO">
+        select * from record_sport ORDER BY record_sport_code
+    </select>
+
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.RecordVRSportVO" parameterType="java.util.List">
+
+    </select>
+
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from record_sport
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RecordVRSportVO">
+        select * from record_sport
+        <where>
+            <include refid="ifWhere"/>
+        </where>
+        <if test="orderColumnName != null and orderDir !='' and start !='' and length !=''" >
+            order by
+            ${orderColumnName} ${orderDir}
+            limit
+            #{start},#{length}
+        </if>
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.RecordVRSportVO">
+        insert into record_sport
+        (<include refid="columnNames"/>)
+        values
+        (<include refid="columnValues"/>)
+    </insert>
+
+    <update id="updateByVO">
+        update record_sport
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="ifSet"/>
+        </trim>
+
+        where pk_record_sport=#{pk_record_sport}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from record_sport where pk_record_sport=#{pk_record_sport}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from record_sport where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_record_sport = #{item}
+        </foreach>
+    </delete>
+
+</mapper>
+

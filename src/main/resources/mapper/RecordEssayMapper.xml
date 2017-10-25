@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.RecordEssayMapper">
+    <sql id="columnNames">
+        record_essay_code,record_essay_name,pk_person,person_name,
+        pk_essay,essay_name,time_length
+    </sql>
+    <sql id="columnValues">
+        #{record_essay_code},#{record_essay_name},#{pk_person},#{person_name},
+        #{pk_essay},#{essay_name},#{time_length}
+    </sql>
+    <sql id="ifWhere">
+        <if test="record_essay_code!=null and record_essay_code!=''">
+            and record_essay_code like "%${record_essay_code}%"
+        </if>
+        <if test="record_essay_name != null and record_essay_name !=''">
+            and record_essay_name like "%${record_essay_name}%"
+        </if>
+        <if test="person_name != null and person_name !=''">
+            and person_name like "%${person_name}%"
+        </if>
+        <if test="essay_name != null and essay_name !=''">
+            and essay_name like "%${essay_name}%"
+        </if>
+    </sql>
+    <sql id="ifSet">
+        <if test="record_essay_code != null">record_essay_code=#{record_essay_code},</if>
+        <if test="record_essay_name != null">record_essay_name=#{record_essay_name},</if>
+        <if test="pk_person != null">pk_person=#{pk_person},</if>
+        <if test="person_name != null">person_name=#{person_name},</if>
+
+        <if test="pk_essay != null">pk_essay=#{pk_essay},</if>
+        <if test="essay_name != null">essay_name=#{essay_name},</if>
+      
+        <if test="time_length != null">time_length=#{time_length},</if>
+    </sql>
+
+    <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.RecordEssayVO">
+
+    </select>
+    <select id="retrieveAll" resultType="com.houoy.app.smarthealth.vo.RecordEssayVO">
+        select * from record_essay ORDER BY record_essay_code
+    </select>
+
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.RecordEssayVO" parameterType="java.util.List">
+
+    </select>
+
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from record_essay
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RecordEssayVO">
+        select * from record_essay
+        <where>
+            <include refid="ifWhere"/>
+        </where>
+        <if test="orderColumnName != null and orderDir !='' and start !='' and length !=''" >
+            order by
+            ${orderColumnName} ${orderDir}
+            limit
+            #{start},#{length}
+        </if>
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.RecordEssayVO">
+        insert into record_essay
+        (<include refid="columnNames"/>)
+        values
+        (<include refid="columnValues"/>)
+    </insert>
+
+    <update id="updateByVO">
+        update record_essay
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="ifSet"/>
+        </trim>
+
+        where pk_record_essay=#{pk_record_essay}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from record_essay where pk_record_essay=#{pk_record_essay}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from record_essay where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_record_essay = #{item}
+        </foreach>
+    </delete>
+
+</mapper>
+
