@@ -48,7 +48,7 @@
         <where>
             <include refid="ifWhere"/>
         </where>
-        <if test="orderColumnName != null and orderDir !='' and start !='' and length !=''" >
+        <if test="orderColumnName !=null and orderDir !=null and start !=null and length !=null" >
             order by
             ${orderColumnName} ${orderDir}
             limit

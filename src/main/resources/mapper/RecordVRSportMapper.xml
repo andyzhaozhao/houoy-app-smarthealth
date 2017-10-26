@@ -23,6 +23,9 @@
         <if test="person_name != null and person_name !=''">
             and person_name like "%${person_name}%"
         </if>
+        <if test="place_name != null and place_name !=''">
+            and place_name like "%${place_name}%"
+        </if>
         <if test="video_name != null and video_name !=''">
             and video_name like "%${video_name}%"
         </if>
@@ -66,7 +69,7 @@
         <where>
             <include refid="ifWhere"/>
         </where>
-        <if test="orderColumnName != null and orderDir !='' and start !='' and length !=''" >
+        <if test="orderColumnName !=null and orderDir !=null and start !=null and length !=null" >
             order by
             ${orderColumnName} ${orderDir}
             limit
