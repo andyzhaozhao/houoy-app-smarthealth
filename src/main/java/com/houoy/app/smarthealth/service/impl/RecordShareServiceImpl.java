@@ -15,4 +15,15 @@ public class RecordShareServiceImpl extends BaseServiceImpl<RecordShareMapper, R
     protected void setService(RecordShareMapper _mapper) {
         mapper = _mapper;
     }
+
+    @Override
+    public Integer updatePortraitByPK(RecordShareVO vo) {
+        return mapper.updatePortraitByPK(vo);
+    }
+
+    @Override
+    public RecordShareVO retrievePortrait(String pk_person) {
+        RecordShareVO rs = mapper.retrievePortrait(pk_person);
+        return rs;
+    }
 }

@@ -12,9 +12,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author andyzhao
@@ -54,6 +62,68 @@ public class RecordShareController extends BaseController<RecordShareVO, RecordS
     @GetMapping(value = "retrieveMobile")
     public PageResultVO retrieveMobile(RecordShareVO recordShareVO, HttpServletRequest request) {
         return super.retrieveMobile(recordShareVO, request);
+    }
+
+    @ApiOperation(value = "上传分享内容图标")
+    @PostMapping("/upload")
+    public RequestResultVO upload(HttpServletRequest request) throws IOException {
+        RequestResultVO resultVO = new RequestResultVO();
+        Map aa = request.getParameterMap();
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+        if (files == null || files.size() <= 0) {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("文件为空");
+        } else {
+            MultipartFile file = files.get(0);
+            // 获取文件名
+            String fileName = file.getOriginalFilename();
+            RecordShareVO recordShareVO = new RecordShareVO();
+            recordShareVO.setPk_person(request.getParameter("pk_person"));
+            recordShareVO.setRecord_share_img(file.getBytes());
+            Integer rs = service.updatePortraitByPK(recordShareVO);
+
+            resultVO.setSuccess(true);
+            resultVO.setMsg("上传成功");
+            resultVO.setResultData(rs);
+        }
+
+        return resultVO;
+    }
+
+    @ApiOperation(value = "获取分享内容图标")
+    @ApiImplicitParam(name = "pk_record_essay", value = "分享内容pk", required = true, paramType = "query", dataType = "string")
+    @GetMapping("/portrait")
+    public RequestResultVO portrait(String pk_record_essay, HttpServletResponse response) throws IOException {
+        RequestResultVO resultVO = new RequestResultVO();
+        if (pk_record_essay == null) {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("文件为空");
+        } else {
+            RecordShareVO rs = service.retrievePortrait(pk_record_essay);
+            if (rs != null) {
+                resultVO.setSuccess(true);
+                resultVO.setResultData(rs);
+            } else {
+                resultVO.setSuccess(false);
+                resultVO.setMsg("没有找到此用户头像");
+            }
+        }
+
+        if (resultVO.getSuccess()) {
+            byte[] data = ((RecordShareVO) resultVO.getResultData()).getRecord_share_img();
+            response.setContentType("image/jpeg");
+            response.setCharacterEncoding("UTF-8");
+            OutputStream outputSream = response.getOutputStream();
+            InputStream in = new ByteArrayInputStream(data);
+            int len = 0;
+            byte[] buf = new byte[1024];
+            while ((len = in.read(buf, 0, 1024)) != -1) {
+                outputSream.write(buf, 0, len);
+            }
+            outputSream.close();
+        }
+
+        return resultVO;
     }
 }
 

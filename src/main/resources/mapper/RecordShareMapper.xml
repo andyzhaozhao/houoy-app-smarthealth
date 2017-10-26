@@ -84,5 +84,14 @@
         </foreach>
     </delete>
 
+    <update id="updatePortraitByPK">
+        update record_share set record_share_img = #{record_share_img}
+
+        where pk_record_share=#{pk_record_share}
+    </update>
+
+    <select id="retrievePortrait" resultType="com.houoy.app.smarthealth.vo.RecordShareVO">
+        select record_share_img from record_share where pk_record_share=#{pk_record_share}
+    </select>
 </mapper>
 

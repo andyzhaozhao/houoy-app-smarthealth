@@ -21,6 +21,8 @@ public class RecordShareVO extends SuperVO {
     private String record_share_name;
     @ApiModelProperty(value = "描述HTML格式", example = "<html><title></title><body>分享内容</body></html>", hidden = false)
     private String record_share_desc;
+    @ApiModelProperty(hidden = true)
+    private byte[] record_share_img;
     @ApiModelProperty(value = "人pk",example = "1",hidden = false)
     private String pk_person;
     @ApiModelProperty(value = "人员名称", example = "1",hidden = false)

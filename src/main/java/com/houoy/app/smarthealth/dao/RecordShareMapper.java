@@ -9,4 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RecordShareMapper extends BaseMapper<RecordShareVO> {
+    Integer updatePortraitByPK(RecordShareVO vo);
+
+    RecordShareVO retrievePortrait(String pk_person) throws RuntimeException;
 }
