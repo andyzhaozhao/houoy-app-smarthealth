@@ -48,6 +48,23 @@ public class RecordVRSportVO extends SuperVO {
     @ApiModelProperty(value = "消耗的卡路里(卡）", example = "555",hidden = false)
     private String calorie;
 
+    //冗余字段
+    @ApiModelProperty(value = "指标查询字段:运动时间的起始值，如：2017-10-25 09:09:09", example = "2017-10-25 09:09:09",hidden = false)
+    private String indicator_time_start;
+    @ApiModelProperty(value = "指标查询字段:运动时间的终止值，如：2018-10-25 09:09:09", example = "2018-10-25 09:09:09",hidden = false)
+    private String indicator_time_end;
+    @ApiModelProperty(value = "指标查询字段：平均心率的最小值", example = "67",hidden = false)
+    private String indicator_heart_rate_min;
+    @ApiModelProperty(value = "指标查询字段：平均心率的最大值", example = "168",hidden = false)
+    private String indicator_heart_rate_max;
+    @ApiModelProperty(value = "指标查询字段：最大心率的最小值", example = "67",hidden = false)
+    private String indicator_heart_rate_max_min;
+    @ApiModelProperty(value = "指标查询字段：最大心率的最大值", example = "168",hidden = false)
+    private String indicator_heart_rate_max_max;
+    @ApiModelProperty(value = "指标查询字段：消耗的卡路里最小值", example = "10",hidden = false)
+    private String indicator_calorie_min;
+    @ApiModelProperty(value = "指标查询字段：消耗的卡路里最大值", example = "500",hidden = false)
+    private String indicator_calorie_max;
 
     @Override
     public String getPKField() {

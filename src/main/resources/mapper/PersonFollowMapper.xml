@@ -35,6 +35,9 @@
         LEFT JOIN im_person b on a.pk_person = b.pk_person
         LEFT JOIN im_person c on a.follow_pk_person = c.pk_person
         <where>
+            <if test="pk_person!=null and pk_person!=''">
+                and a.pk_person = #{pk_person}
+            </if>
             <if test="person_name!=null and person_name!=''">
                 and b.person_name like "%${person_name}%"
             </if>

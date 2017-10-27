@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PersonVO extends SuperVO {
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "用户pk",hidden = false)
     private String pk_person;
     @ApiModelProperty(value = "用户编码",hidden = false)
     private String person_code;

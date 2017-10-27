@@ -20,14 +20,40 @@
         <if test="record_sport_name != null and record_sport_name !=''">
             and record_sport_name like "%${record_sport_name}%"
         </if>
+        <if test="pk_person!=null and pk_person!=''">
+            and pk_person = #{pk_person}
+        </if>
         <if test="person_name != null and person_name !=''">
             and person_name like "%${person_name}%"
+        </if>
+        <if test="pk_place!=null and pk_place!=''">
+            and pk_place = #{pk_place}
         </if>
         <if test="place_name != null and place_name !=''">
             and place_name like "%${place_name}%"
         </if>
+        <if test="pk_video!=null and pk_video!=''">
+            and pk_video = #{pk_video}
+        </if>
         <if test="video_name != null and video_name !=''">
             and video_name like "%${video_name}%"
+        </if>
+
+        <if test="indicator_time_start != null and indicator_time_end != null">
+            (time_start &gt; #{indicator_time_start} and time_end &lt; #{indicator_time_end})
+        </if>
+        <if test="time_length != null">time_length=#{time_length},</if>
+
+        <if test="indicator_heart_rate_min != null and indicator_heart_rate_max != null">
+            (heart_rate &gt; #{indicator_heart_rate_min} and heart_rate &lt; #{indicator_heart_rate_max})
+        </if>
+
+        <if test="indicator_calorie_min != null and indicator_calorie_max != null">
+            (calorie &gt; #{indicator_calorie_min} and calorie &lt; #{indicator_calorie_max})
+        </if>
+        <if test="indicator_heart_rate_max_min != null and indicator_heart_rate_max_max != null">
+            (heart_rate_max &gt; #{indicator_heart_rate_max_min} and heart_rate_max &lt;
+            #{indicator_heart_rate_max_max})
         </if>
     </sql>
     <sql id="ifSet">

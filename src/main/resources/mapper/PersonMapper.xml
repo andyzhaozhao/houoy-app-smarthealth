@@ -13,6 +13,9 @@
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.PersonVO">
         select * from im_person
         <where>
+            <if test="pk_person!=null and pk_person!=''">
+                and pk_person = #{pk_person}
+            </if>
             <if test="person_code!=null and person_code!=''">
                 and person_code like "%${person_code}%"
             </if>
