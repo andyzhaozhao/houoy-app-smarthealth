@@ -31,7 +31,6 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
     })
-    @ResponseBody
     @PostMapping("/save")
     public RequestResultVO add(@RequestBody UserVO userVO) {
         Integer num = 0;
@@ -62,7 +61,6 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pks", value = "用户的pk列表", required = true, dataType = "List", paramType = "body")
     })
-    @ResponseBody
     @PostMapping("/delete")
     public RequestResultVO delete(@RequestBody List<String> pk_users) {
         Integer num = userService.deleteUsers(pk_users);
@@ -83,7 +81,6 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
     })
-    @ResponseBody
     @GetMapping(value = "retrieve")
     public JquryDataTablesVO<UserVO> retrieve(UserVO vo, HttpServletRequest request) {
 
@@ -103,7 +100,6 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
     })
-    @ResponseBody
     @PostMapping(value = "updateUserRole")
     public RequestResultVO updateUserRole(UserVO vo, HttpServletRequest request) {
 
@@ -119,5 +115,16 @@ public class UserController {
         return resultVO;
     }
 
+    @ApiOperation(value = "忘记秘密处理")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
+    })
+    @PostMapping(value = "forgetPW")
+    public RequestResultVO forgetPassword(UserVO vo) {
+        Boolean isSuccess = userService.forgetPassword(vo);
+        RequestResultVO resultVO = new RequestResultVO();
+        resultVO.setSuccess(isSuccess);
+        return resultVO;
+    }
 
 }

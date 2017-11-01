@@ -1,5 +1,6 @@
 package com.houoy.app.smarthealth.service;
 
+import com.houoy.common.vo.RequestResultVO;
 import com.houoy.common.vo.UserVO;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface UserService {
     Integer deleteUsers(List<String> pk_users);
 
     Boolean updateUserRole(UserVO vo);
+
+    Boolean forgetPassword(UserVO vo);
 }
