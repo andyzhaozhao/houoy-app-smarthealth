@@ -1,9 +1,7 @@
 package com.houoy.app.smarthealth.service.impl;
 
-import com.houoy.app.smarthealth.client.MailClient;
 import com.houoy.app.smarthealth.dao.UserMapper;
 import com.houoy.app.smarthealth.service.UserService;
-import com.houoy.common.mail.MailVO;
 import com.houoy.common.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +16,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
-
-
-    @Autowired
-    private MailClient mailClient;
 
     @Override
     public List<UserVO> retrieveAllWithPage(UserVO vo) throws RuntimeException {
@@ -61,10 +55,4 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    public Boolean forgetPassword(UserVO vo) {
-        MailVO mailVO = new MailVO();
-        mailVO.setContent("asfdas");
-        mailVO.setTo("656093863@qq.com");
-        return mailClient.sendSimpleMail(mailVO);
-    }
 }

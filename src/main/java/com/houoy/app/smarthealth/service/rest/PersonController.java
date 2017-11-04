@@ -83,20 +83,25 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
     }
 
     @ApiOperation(value = "上传用户头像")
-    @PostMapping("/upload")
-    public RequestResultVO upload(HttpServletRequest request) throws IOException {
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "file", value = "图片数据", required = true, paramType = "file", dataType = "file"),
+//            @ApiImplicitParam(name = "pk_person", value = "用户主键", required = true, paramType = "query", dataType = "string")
+//    })
+    @PostMapping(value = "/upload",consumes = "multipart/form-data",produces = "application/json")
+    public RequestResultVO upload(String pk_person, @RequestParam("file") MultipartFile file) throws IOException {
         RequestResultVO resultVO = new RequestResultVO();
-        Map aa = request.getParameterMap();
-        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-        if (files == null || files.size() <= 0) {
+//        Map aa = request.getParameterMap();
+       // List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+        if (file == null) {
             resultVO.setSuccess(false);
             resultVO.setMsg("文件为空");
         } else {
-            MultipartFile file = files.get(0);
+            //MultipartFile file = files.get(0);
             // 获取文件名
             String fileName = file.getOriginalFilename();
             PersonVO personVO = new PersonVO();
-            personVO.setPk_person(request.getParameter("pk_person"));
+            personVO.setPk_person(pk_person);
+//            personVO.setPk_person(request.getParameter("pk_person"));
             personVO.setPortrait(file.getBytes());
             Integer rs = service.updatePortraitByPK(personVO);
 

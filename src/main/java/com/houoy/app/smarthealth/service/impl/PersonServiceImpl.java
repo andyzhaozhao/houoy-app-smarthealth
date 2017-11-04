@@ -1,12 +1,15 @@
 package com.houoy.app.smarthealth.service.impl;
 
+import com.houoy.app.smarthealth.client.MailClient;
 import com.houoy.app.smarthealth.dao.PersonMapper;
 import com.houoy.app.smarthealth.service.PersonService;
 import com.houoy.app.smarthealth.vo.PersonVO;
+import com.houoy.common.mail.MailVO;
 import com.houoy.common.service.BaseServiceImpl;
 import com.houoy.common.vo.RequestResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -15,6 +18,9 @@ import java.util.List;
  */
 @Service("personService")
 public class PersonServiceImpl extends BaseServiceImpl<PersonMapper, PersonVO> implements PersonService {
+
+    @Autowired
+    private MailClient mailClient;
 
     @Autowired
     private PersonMapper personMapper;
@@ -53,4 +59,25 @@ public class PersonServiceImpl extends BaseServiceImpl<PersonMapper, PersonVO> i
         }
         return resultVO;
     }
+
+    public Boolean forgetPassword(PersonVO personVO) {
+        MailVO mailVO = new MailVO();
+        String email = personVO.getEmail();
+        if (!StringUtils.isEmpty(email)) {
+            List<PersonVO> personVOs = personMapper.retrieveAllWithPage(personVO);
+            if (personVOs == null || personVOs.size() <= 0) {
+                return false;
+            } else {
+                PersonVO person = personVOs.get(0);
+                mailVO.setSubject("忘记密码");
+                mailVO.setContent(person.getPassword());
+                mailVO.setTo("您的密码是："+person.getEmail());
+                Boolean result = mailClient.sendSimpleMail(mailVO);
+                return result;
+            }
+        } else {
+            return false;
+        }
+    }
+
 }

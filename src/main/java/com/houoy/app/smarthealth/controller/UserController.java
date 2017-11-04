@@ -115,16 +115,16 @@ public class UserController {
         return resultVO;
     }
 
-    @ApiOperation(value = "忘记秘密处理")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
-    })
-    @PostMapping(value = "forgetPW")
-    public RequestResultVO forgetPassword(UserVO vo) {
-        Boolean isSuccess = userService.forgetPassword(vo);
-        RequestResultVO resultVO = new RequestResultVO();
-        resultVO.setSuccess(isSuccess);
-        return resultVO;
-    }
+//    @ApiOperation(value = "忘记秘密处理")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "userVO", value = "用户信息", required = true, paramType = "body", dataType = "UserVO")
+//    })
+//    @PostMapping(value = "forgetPW")
+//    public RequestResultVO forgetPassword(UserVO vo) {
+//        Boolean isSuccess = userService.forgetPassword(vo);
+//        RequestResultVO resultVO = new RequestResultVO();
+//        resultVO.setSuccess(isSuccess);
+//        return resultVO;
+//    }
 
 }

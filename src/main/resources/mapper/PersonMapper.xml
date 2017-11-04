@@ -28,6 +28,9 @@
             <if test="mobile != null and mobile !=''">
                 and mobile like "%${mobile}%"
             </if>
+            <if test="email != null and email !=''">
+                and email = #{email}
+            </if>
         </where>
         <if test="orderColumnName != null and orderDir !=''and start !='' and length !=''" >
             order by

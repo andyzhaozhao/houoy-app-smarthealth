@@ -176,6 +176,29 @@ public class LoginController {
         }
         return resultVO;
     }
+
+    @ApiOperation(value = "忘记密码")
+    @PostMapping("/forgetPassword")
+    public RequestResultVO forgetPassword(String email) throws IOException {
+        RequestResultVO resultVO = new RequestResultVO();
+        if (StringUtils.isEmpty(email)) {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("参数不可以为空，请输入邮箱或者手机号");
+        } else {
+            PersonVO personVO = new PersonVO();
+            personVO.setEmail(email);
+//            personVO.setMobile(mobile);
+            Boolean result = personService.forgetPassword(personVO);
+            resultVO.setSuccess(result);
+            if (result) {
+                resultVO.setMsg("密码已经发送到用户邮箱，请查收");
+            } else {
+                resultVO.setMsg("密码发送到用户邮箱失败");
+            }
+        }
+
+        return resultVO;
+    }
 }
 
 

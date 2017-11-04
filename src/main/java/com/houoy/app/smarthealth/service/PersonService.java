@@ -8,4 +8,6 @@ public interface PersonService extends BaseService {
     Integer updatePortraitByPK(PersonVO vo);
 
     RequestResultVO retrievePortrait(String pk_person);
+
+    Boolean forgetPassword(PersonVO vo);
 }
