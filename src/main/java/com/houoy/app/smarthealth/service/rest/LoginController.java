@@ -178,7 +178,7 @@ public class LoginController {
     }
 
     @ApiOperation(value = "忘记密码")
-    @PostMapping("/forgetPassword")
+    @GetMapping("/forgetPassword")
     public RequestResultVO forgetPassword(String email) throws IOException {
         RequestResultVO resultVO = new RequestResultVO();
         if (StringUtils.isEmpty(email)) {

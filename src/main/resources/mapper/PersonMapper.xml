@@ -54,6 +54,7 @@
             <if test="person_alias!= null">person_alias=#{person_alias},</if>
             <if test="password != null">password=#{password},</if>
             <if test="mobile != null">mobile=#{mobile}</if>
+            <if test="portraitPath != null">portraitPath=#{portraitPath}</if>
         </trim>
 
         where pk_person=#{pk_person}

@@ -93,6 +93,8 @@ public class PersonVO extends SuperVO {
     private String img5_comment;
 
     @ApiModelProperty(hidden = true)
+    private String portraitPath;
+    @ApiModelProperty(hidden = true)
     private byte[] portrait;
     @ApiModelProperty(hidden = true)
     private byte[] img1;

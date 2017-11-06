@@ -1,7 +1,9 @@
 package com.houoy.app.smarthealth.service.rest;
 
+import com.houoy.app.smarthealth.config.NginxConfig;
 import com.houoy.app.smarthealth.service.PersonService;
 import com.houoy.app.smarthealth.vo.PersonVO;
+import com.houoy.common.utils.SftpUtils;
 import com.houoy.common.vo.JquryDataTablesVO;
 import com.houoy.common.vo.PageResultVO;
 import com.houoy.common.vo.RequestResultVO;
@@ -12,9 +14,9 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author andyzhao
@@ -32,6 +33,9 @@ import java.util.Map;
 @RequestMapping("/api/person")
 public class PersonController extends BaseController<PersonVO, PersonService> {
     private static final Log logger = LogFactory.getLog(PersonController.class);
+
+    @Autowired
+    private NginxConfig nginxConfig;
 
     @Autowired
     protected void setService(PersonService personService) {
@@ -83,6 +87,38 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
     }
 
     @ApiOperation(value = "上传用户头像")
+    @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = "application/json")
+    public RequestResultVO upload(String pk_person, @RequestParam("file") MultipartFile file) throws IOException {
+        RequestResultVO resultVO = new RequestResultVO();
+
+        if (!StringUtils.isEmpty(pk_person) && file != null) {
+            String fileName = file.getOriginalFilename();
+
+            PersonVO personVO = new PersonVO();
+            personVO.setPk_person(pk_person);
+            personVO.setPortraitPath(pk_person + "/" + fileName);
+            Integer result = service.updateByVO(personVO);
+            if (result > 0) {
+                SftpUtils sftpUtils = new SftpUtils(nginxConfig.getUrl(), nginxConfig.getPort(), nginxConfig.getUser()
+                        , nginxConfig.getPass());
+                sftpUtils.upload(nginxConfig.getPathPerson() + "/" + pk_person, file.getInputStream(), fileName);
+
+                resultVO.setSuccess(true);
+                resultVO.setMsg("保存成功");
+                resultVO.setResultData(true);
+            } else {
+                resultVO.setSuccess(false);
+                resultVO.setMsg("保存到mysql失败");
+            }
+        } else {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("保存失败");
+        }
+
+        return resultVO;
+    }
+    /*
+    @ApiOperation(value = "上传用户头像")
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "file", value = "图片数据", required = true, paramType = "file", dataType = "file"),
 //            @ApiImplicitParam(name = "pk_person", value = "用户主键", required = true, paramType = "query", dataType = "string")
@@ -116,9 +152,9 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
         }
 
         return resultVO;
-    }
+    }*/
 
-    @ApiOperation(value = "获取用户头像")
+    @ApiOperation(value = "流式下载用户头像")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pk", value = "用户信息", required = true, paramType = "query", dataType = "string")
     })
