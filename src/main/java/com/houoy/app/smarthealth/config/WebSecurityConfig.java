@@ -1,5 +1,8 @@
 package com.houoy.app.smarthealth.config;
 
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -13,12 +16,24 @@ import javax.servlet.http.HttpSession;
 
 /**
  * 登录配置
- *
  */
 @Configuration
 public class WebSecurityConfig extends WebMvcConfigurerAdapter {
 
     public static final String Default_Session_Key = "user";
+
+    //解决bugThe multi-part request contained parameter data (excluding uploaded files) that exceeded the limit for maxPostSize set on the associated connector
+//    @Bean
+//    EmbeddedServletContainerCustomizer containerCustomizer() throws Exception {
+//        return (ConfigurableEmbeddedServletContainer container) -> {
+//            if (container instanceof TomcatEmbeddedServletContainerFactory) {
+//                TomcatEmbeddedServletContainerFactory tomcat = (TomcatEmbeddedServletContainerFactory) container;
+//                tomcat.addConnectorCustomizers((connector) -> {
+//                    connector.setMaxPostSize(10000000); // 10 MB
+//                });
+//            }
+//        };
+//    }
 
     @Bean
     public SecurityInterceptor getSecurityInterceptor() {
@@ -34,7 +49,7 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
         addInterceptor.excludePathPatterns("/api/login/**");
         addInterceptor.excludePathPatterns("/**");
 
-       // addInterceptor.excludePathPatterns("/index**");
+        // addInterceptor.excludePathPatterns("/index**");
 
         // 拦截配置
         //addInterceptor.addPathPatterns("/**");
@@ -46,15 +61,15 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
                 throws Exception {
             HttpSession session = request.getSession();
-            String sessionID= session.getId();
+            String sessionID = session.getId();
             Object mes = session.getAttribute(Default_Session_Key);
 
             if (session.getAttribute(Default_Session_Key) != null)
                 return true;
 
             // 跳转登录
-           // String url = "/login";
-          //  response.sendRedirect(url);
+            // String url = "/login";
+            //  response.sendRedirect(url);
             return false;
         }
     }

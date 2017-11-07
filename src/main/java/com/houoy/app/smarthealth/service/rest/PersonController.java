@@ -1,7 +1,9 @@
 package com.houoy.app.smarthealth.service.rest;
 
+import com.houoy.app.smarthealth.ImageUtil;
 import com.houoy.app.smarthealth.config.NginxConfig;
 import com.houoy.app.smarthealth.service.PersonService;
+import com.houoy.app.smarthealth.vo.PersonImageVO;
 import com.houoy.app.smarthealth.vo.PersonVO;
 import com.houoy.common.utils.SftpUtils;
 import com.houoy.common.vo.JquryDataTablesVO;
@@ -86,11 +88,50 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
         return super.retrieveMobile(personVO, request);
     }
 
+    @ApiOperation(value = "通过手机端上传用户头像")
+    @ApiImplicitParam(name = "personImageVO", value = "用户VO", required = true, dataType = "PersonImageVO", paramType = "body")
+    @PostMapping(value = "/uploadMobile" , produces = "application/json;charset=utf-8")
+    public RequestResultVO uploadMobile(@RequestBody PersonImageVO personImageVO) throws IOException {
+        RequestResultVO resultVO = new RequestResultVO();
+        String pk_person = personImageVO.getPk_person();
+        String file = personImageVO.getImage();
+
+        if (!StringUtils.isEmpty(pk_person) && !StringUtils.isEmpty(file)) {
+            //流式传输直接用pk_person
+            String fileName = pk_person + ".jpg";
+
+            PersonVO personVO = new PersonVO();
+            personVO.setPk_person(pk_person);
+            personVO.setPortraitPath(pk_person + "/" + fileName);
+            Integer result = service.updateByVO(personVO);
+            if (result > 0) {
+                byte[] bytes = ImageUtil.GenerateImageByte(file);
+                InputStream inputStream = new ByteArrayInputStream(bytes);
+
+                SftpUtils sftpUtils = new SftpUtils(nginxConfig.getUrl(), nginxConfig.getPort(), nginxConfig.getUser()
+                        , nginxConfig.getPass());
+                sftpUtils.upload(nginxConfig.getPathPerson() + "/" + pk_person, inputStream, fileName);
+
+                resultVO.setSuccess(true);
+                resultVO.setMsg("保存成功");
+                resultVO.setResultData(true);
+            }
+            resultVO.setSuccess(false);
+            resultVO.setMsg("保存失败");
+        } else {
+            resultVO.setSuccess(false);
+            resultVO.setMsg("保存失败");
+        }
+
+        return resultVO;
+    }
+
     @ApiOperation(value = "上传用户头像")
-    @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = "application/json")
-    public RequestResultVO upload(String pk_person, @RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping(value = "/upload")//, consumes = "multipart/form-data", produces = "application/json")
+    public RequestResultVO upload(String pk_person, MultipartFile file) throws IOException {
         RequestResultVO resultVO = new RequestResultVO();
 
+        // List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
         if (!StringUtils.isEmpty(pk_person) && file != null) {
             String fileName = file.getOriginalFilename();
 
@@ -106,9 +147,6 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
                 resultVO.setSuccess(true);
                 resultVO.setMsg("保存成功");
                 resultVO.setResultData(true);
-            } else {
-                resultVO.setSuccess(false);
-                resultVO.setMsg("保存到mysql失败");
             }
         } else {
             resultVO.setSuccess(false);
@@ -117,42 +155,6 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
 
         return resultVO;
     }
-    /*
-    @ApiOperation(value = "上传用户头像")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "file", value = "图片数据", required = true, paramType = "file", dataType = "file"),
-//            @ApiImplicitParam(name = "pk_person", value = "用户主键", required = true, paramType = "query", dataType = "string")
-//    })
-    @PostMapping(value = "/upload",consumes = "multipart/form-data",produces = "application/json")
-    public RequestResultVO upload(String pk_person, @RequestParam("file") MultipartFile file) throws IOException {
-        RequestResultVO resultVO = new RequestResultVO();
-//        Map aa = request.getParameterMap();
-       // List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-        if (file == null) {
-            resultVO.setSuccess(false);
-            resultVO.setMsg("文件为空");
-        } else {
-            //MultipartFile file = files.get(0);
-            // 获取文件名
-            String fileName = file.getOriginalFilename();
-            PersonVO personVO = new PersonVO();
-            personVO.setPk_person(pk_person);
-//            personVO.setPk_person(request.getParameter("pk_person"));
-            personVO.setPortrait(file.getBytes());
-            Integer rs = service.updatePortraitByPK(personVO);
-
-//            logger.info("上传的文件名为：" + fileName);
-//            // 获取文件的后缀名
-//            String suffixName = fileName.substring(fileName.lastIndexOf("."));
-//            logger.info("上传的后缀名为：" + suffixName);
-
-            resultVO.setSuccess(true);
-            resultVO.setMsg("上传成功");
-            resultVO.setResultData(rs);
-        }
-
-        return resultVO;
-    }*/
 
     @ApiOperation(value = "流式下载用户头像")
     @ApiImplicitParams({
