@@ -89,12 +89,14 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
     }
 
     @ApiOperation(value = "通过手机端上传用户头像")
-    @ApiImplicitParam(name = "personImageVO", value = "用户VO", required = true, dataType = "PersonImageVO", paramType = "body")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pk_person", value = "用户PK", required = true, dataType = "string",paramType = "query"),
+            @ApiImplicitParam(name = "image", value = "图片的base64字符串", required = true, dataType = "string", paramType = "body")
+    })
     @PostMapping(value = "/uploadMobile" , produces = "application/json;charset=utf-8")
-    public RequestResultVO uploadMobile(@RequestBody PersonImageVO personImageVO) throws IOException {
+    public RequestResultVO uploadMobile(String pk_person,@RequestBody String image) throws IOException {
         RequestResultVO resultVO = new RequestResultVO();
-        String pk_person = personImageVO.getPk_person();
-        String file = personImageVO.getImage();
+        String file = image ;
 
         if (!StringUtils.isEmpty(pk_person) && !StringUtils.isEmpty(file)) {
             //流式传输直接用pk_person
