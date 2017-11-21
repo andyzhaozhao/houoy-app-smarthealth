@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.houoy.app.smarthealth.dao.RecordVRSportDetailMapper">
+    <sql id="columnNames">
+        sport_detail_code,sport_detail_name,pk_person,person_name,
+        pk_place,place_name,pk_video,video_name,
+        calorie,timestamp,heart
+    </sql>
+    <sql id="columnValues">
+        #{sport_detail_code},#{sport_detail_name},#{pk_person},#{person_name},
+        #{pk_place},#{place_name},#{pk_video},#{video_name},
+        #{calorie},#{timestamp},#{heart}
+    </sql>
+    <sql id="ifWhere">
+        <if test="sport_detail_code!=null and sport_detail_code!=''">
+            and sport_detail_code like "%${sport_detail_code}%"
+        </if>
+        <if test="sport_detail_name != null and sport_detail_name !=''">
+            and sport_detail_name like "%${sport_detail_name}%"
+        </if>
+        <if test="pk_person!=null and pk_person!=''">
+            and pk_person = #{pk_person}
+        </if>
+        <if test="person_name != null and person_name !=''">
+            and person_name like "%${person_name}%"
+        </if>
+        <if test="pk_place!=null and pk_place!=''">
+            and pk_place = #{pk_place}
+        </if>
+        <if test="place_name != null and place_name !=''">
+            and place_name like "%${place_name}%"
+        </if>
+        <if test="pk_video!=null and pk_video!=''">
+            and pk_video = #{pk_video}
+        </if>
+        <if test="video_name != null and video_name !=''">
+            and video_name like "%${video_name}%"
+        </if>
+    </sql>
+    <sql id="ifSet">
+        <if test="sport_detail_code != null">sport_detail_code=#{sport_detail_code},</if>
+        <if test="sport_detail_name != null">sport_detail_name=#{sport_detail_name},</if>
+        <if test="pk_person != null">pk_person=#{pk_person},</if>
+        <if test="person_name != null">person_name=#{person_name},</if>
+
+        <if test="pk_place != null">pk_place=#{pk_place},</if>
+        <if test="place_name != null">place_name=#{place_name},</if>
+        <if test="pk_video != null">pk_video=#{pk_video},</if>
+        <if test="video_name != null">video_name=#{video_name},</if>
+
+        <if test="calorie != null">calorie=#{calorie},</if>
+        <if test="timestamp != null">timestamp=#{timestamp},</if>
+        <if test="heart != null">heart=#{heart}</if>
+    </sql>
+
+    <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.RecordVRSportDetailVO">
+
+    </select>
+    <select id="retrieveAll" resultType="com.houoy.app.smarthealth.vo.RecordVRSportDetailVO">
+        select * from sport_detail ORDER BY sport_detail_code
+    </select>
+
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.RecordVRSportDetailVO"
+            parameterType="java.util.List">
+
+    </select>
+
+    <select id="retrieveAllCount" resultType="java.lang.Long">
+        select count(*) from sport_detail
+    </select>
+    <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RecordVRSportDetailVO">
+        select * from sport_detail
+        <where>
+            <include refid="ifWhere"/>
+        </where>
+        <if test="orderColumnName !=null and orderDir !=null and start !=null and length !=null">
+            order by
+            ${orderColumnName} ${orderDir}
+            limit
+            #{start},#{length}
+        </if>
+    </select>
+
+    <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.RecordVRSportDetailVO">
+        insert into sport_detail
+        (<include refid="columnNames"/>)
+        values
+        (<include refid="columnValues"/>)
+    </insert>
+
+    <update id="updateByVO">
+        update sport_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="ifSet"/>
+        </trim>
+
+        where pk_sport_detail=#{pk_sport_detail}
+    </update>
+
+    <delete id="deleteByPK">
+        delete from sport_detail where pk_sport_detail=#{pk_sport_detail}
+    </delete>
+
+    <delete id="deleteByPKs" parameterType="java.util.List">
+        delete from sport_detail where
+        <foreach collection="list" item="item" index="index"
+                 open="(" separator="or" close=")">
+            pk_sport_detail = #{item}
+        </foreach>
+    </delete>
+
+</mapper>
+
