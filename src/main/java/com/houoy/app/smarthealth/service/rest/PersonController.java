@@ -117,9 +117,10 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
                 resultVO.setSuccess(true);
                 resultVO.setMsg("保存成功");
                 resultVO.setResultData(true);
+            }else{
+                resultVO.setSuccess(false);
+                resultVO.setMsg("保存失败");
             }
-            resultVO.setSuccess(false);
-            resultVO.setMsg("保存失败");
         } else {
             resultVO.setSuccess(false);
             resultVO.setMsg("保存失败");
