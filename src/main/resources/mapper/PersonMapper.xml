@@ -16,8 +16,11 @@
             <if test="pk_person!=null and pk_person!=''">
                 and pk_person = #{pk_person}
             </if>
+            <if test="password!=null and password!=''">
+                and password = #{password}
+            </if>
             <if test="person_code!=null and person_code!=''">
-                and person_code like "%${person_code}%"
+                and person_code = #{person_code}
             </if>
             <if test="person_name != null and person_name !=''">
                 and person_name like "%${person_name}%"
@@ -26,7 +29,7 @@
                 and person_alias like "%${person_alias}%"
             </if>
             <if test="mobile != null and mobile !=''">
-                and mobile like "%${mobile}%"
+                and mobile = #{mobile}
             </if>
             <if test="email != null and email !=''">
                 and email = #{email}

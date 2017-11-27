@@ -123,7 +123,7 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
             }
         } else {
             resultVO.setSuccess(false);
-            resultVO.setMsg("保存失败");
+            resultVO.setMsg("保存失败,参数不能为空");
         }
 
         return resultVO;

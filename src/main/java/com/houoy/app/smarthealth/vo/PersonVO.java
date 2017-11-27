@@ -16,7 +16,7 @@ public class PersonVO extends SuperVO {
     private String pk_person;
     @ApiModelProperty(value = "用户编码",hidden = false)
     private String person_code;
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "格言",hidden = false)
     private String person_alias;
     @ApiModelProperty(value = "用户名称",hidden = false)
     private String person_name;
@@ -28,7 +28,7 @@ public class PersonVO extends SuperVO {
     private String email;
     @ApiModelProperty(hidden = true)
     private String identity;
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty(value = "年龄",hidden = false)
     private String age;
     @ApiModelProperty(hidden = true)
     private String address;
