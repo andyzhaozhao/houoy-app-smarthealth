@@ -34,6 +34,9 @@
             <if test="email != null and email !=''">
                 and email = #{email}
             </if>
+            <if test="age != null and age !=''">
+                and age = #{age}
+            </if>
         </where>
         <if test="orderColumnName != null and orderDir !=''and start !='' and length !=''" >
             order by
@@ -44,9 +47,9 @@
     </select>
 
     <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.PersonVO">
-        insert into im_person(person_code,person_alias,person_name,password,mobile)
+        insert into im_person(person_code,person_alias,person_name,password,mobile,email,age)
         values
-        (#{person_code},#{person_alias},#{person_name},#{password},#{mobile})
+        (#{person_code},#{person_alias},#{person_name},#{password},#{mobile},#{email},#{age})
     </insert>
 
     <update id="updateByVO">
@@ -57,6 +60,8 @@
             <if test="person_alias!= null">person_alias=#{person_alias},</if>
             <if test="password != null">password=#{password},</if>
             <if test="mobile != null">mobile=#{mobile}</if>
+            <if test="email != null">email=#{email}</if>
+            <if test="age != null">age=#{age}</if>
             <if test="portraitPath != null">portraitPath=#{portraitPath}</if>
         </trim>
 
