@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserService {
     List<UserVO> retrieveAllWithPage(UserVO vo) throws RuntimeException;
 
-    Long retrieveAllCount() throws RuntimeException;
+    Long retrieveAllCount(UserVO vo) throws RuntimeException;
 
     Integer saveUserByVO(UserVO vo);
 

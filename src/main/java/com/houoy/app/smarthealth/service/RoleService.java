@@ -7,7 +7,7 @@ import java.util.List;
 public interface RoleService {
     List<RoleVO> retrieveAllWithPage(RoleVO vo) throws RuntimeException;
 
-    Integer retrieveAllCount() throws RuntimeException;
+    Integer retrieveAllCount(RoleVO vo) throws RuntimeException;
 
     Integer saveRoleByVO(RoleVO vo);
 

@@ -72,7 +72,7 @@ public class RoleController {
     public JquryDataTablesVO<RoleVO> retrieve(RoleVO vo, HttpServletRequest request) {
         vo = (RoleVO) JqueryDataTablesUtil.filterParam(vo, request);
         List<RoleVO> result = roleService.retrieveAllWithPage(vo);
-        Integer count = roleService.retrieveAllCount();
+        Integer count = roleService.retrieveAllCount(vo);
         JquryDataTablesVO rtv = JqueryDataTablesUtil.madeJqueryDatatablesVO(Long.valueOf(count), result);
         return rtv;
     }

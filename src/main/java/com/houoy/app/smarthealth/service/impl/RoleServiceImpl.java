@@ -23,8 +23,8 @@ public class RoleServiceImpl implements RoleService {
         return datas;
     }
 
-    public Integer retrieveAllCount() throws RuntimeException {
-        return roleMapper.retrieveAllCount();
+    public Integer retrieveAllCount(RoleVO vo) throws RuntimeException {
+        return roleMapper.retrieveAllCount(vo);
     }
 
     public Integer saveRoleByVO(RoleVO vo) {

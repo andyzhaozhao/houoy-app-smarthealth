@@ -24,8 +24,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long retrieveAllCount() throws RuntimeException {
-        return userMapper.retrieveAllCount();
+    public Long retrieveAllCount(UserVO vo) throws RuntimeException {
+        return userMapper.retrieveAllCount(vo);
     }
 
     @Override

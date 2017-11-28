@@ -91,7 +91,7 @@ public class UserController {
         vo.setOrderDir(orderDir);
 
         List<UserVO> result = userService.retrieveAllWithPage(vo);
-        Long count = userService.retrieveAllCount();
+        Long count = userService.retrieveAllCount(vo);
         JquryDataTablesVO rtv = JqueryDataTablesUtil.madeJqueryDatatablesVO(count, result);
         return rtv;
     }
