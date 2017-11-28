@@ -28,8 +28,8 @@ public class EssayTypeServiceImpl implements EssayTypeService {
     }
 
     @Override
-    public Long retrieveAllCount() throws RuntimeException {
-        return placeMapper.retrieveAllCount();
+    public Long retrieveAllCount(PlaceVO vo) throws RuntimeException {
+        return placeMapper.retrieveAllCount(vo);
     }
 
     @Override
