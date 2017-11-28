@@ -8,6 +8,7 @@ import com.houoy.common.vo.RequestResultVO;
 import com.houoy.common.web.BaseController;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,32 @@ public class RecordShareController extends BaseController<RecordShareVO, RecordS
     @ApiOperation(value = "移动端分页查询阅读记录")
     @GetMapping(value = "retrieveMobile")
     public PageResultVO retrieveMobile(RecordShareVO recordShareVO, HttpServletRequest request) {
-        return super.retrieveMobile(recordShareVO, request);
+
+        List<RecordShareVO> result = null;
+        Long count = null;
+        if(StringUtils.isNotEmpty(recordShareVO.getHas_follow())) {
+            switch (recordShareVO.getHas_follow()) {
+                case "0":
+                    result = service.retrieveAllUnFollowWithPage(recordShareVO);
+                    count = service.retrieveAllUnFollowCount(recordShareVO);
+                    break;
+                case "1":
+                    result = service.retrieveAllFollowWithPage(recordShareVO);
+                    count = service.retrieveAllFollowCount(recordShareVO);
+                    break;
+            }
+        }
+
+        PageResultVO pageResultVO = new PageResultVO();
+        pageResultVO.setSuccess(Boolean.valueOf(true));
+        pageResultVO.setMsg("查询成功");
+        pageResultVO.setResultData(result);
+        pageResultVO.setStart(recordShareVO.getStart());
+        pageResultVO.setLength(recordShareVO.getLength());
+        pageResultVO.setOrderColumnName(recordShareVO.getOrderColumnName());
+        pageResultVO.setOrderDir(recordShareVO.getOrderDir());
+        pageResultVO.setTotal(count + "");
+        return pageResultVO;
     }
 
     @ApiOperation(value = "上传分享内容图标")

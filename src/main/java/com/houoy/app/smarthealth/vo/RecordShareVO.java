@@ -28,6 +28,10 @@ public class RecordShareVO extends SuperVO {
     @ApiModelProperty(value = "人员名称", example = "1",hidden = false)
     private String person_name;
 
+    //冗余字段
+    @ApiModelProperty(value = "是否已经关注此条记录的作者.1为是，0为否", example = "1",hidden = false)
+    private String has_follow;
+
     @Override
     public String getPKField() {
         return "pk_record_share";

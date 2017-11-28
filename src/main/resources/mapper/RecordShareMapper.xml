@@ -19,9 +19,6 @@
         <if test="person_name != null and person_name !=''">
             and person_name like "%${person_name}%"
         </if>
-        <if test="pk_person != null and pk_person !=''">
-            and pk_person in (select follow_pk_person from im_person_follow where pk_person='1')
-        </if>
     </sql>
     <sql id="ifSet">
         <if test="record_share_code != null">record_share_code=#{record_share_code},</if>
@@ -30,6 +27,14 @@
         <if test="person_name != null">person_name=#{person_name},</if>
 
         <if test="record_share_desc != null">record_share_desc=#{record_share_desc},</if>
+    </sql>
+    <sql id="page">
+        <if test="orderColumnName !=null and orderDir !=null and start !=null and length !=null" >
+            order by
+            ${orderColumnName} ${orderDir}
+            limit
+            #{start},#{length}
+        </if>
     </sql>
 
     <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.RecordShareVO">
@@ -45,18 +50,60 @@
 
     <select id="retrieveAllCount" resultType="java.lang.Long">
         select count(*) from record_share
+        <where>
+            <if test="pk_person != null and pk_person !=''">
+                and pk_person in (select follow_pk_person from im_person_follow where pk_person='1')
+            </if>
+            <include refid="ifWhere"/>
+        </where>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RecordShareVO">
         select * from record_share
         <where>
+            <if test="pk_person != null and pk_person !=''">
+                and pk_person in (select follow_pk_person from im_person_follow where pk_person='1')
+            </if>
             <include refid="ifWhere"/>
         </where>
-        <if test="orderColumnName !=null and orderDir !=null and start !=null and length !=null" >
-            order by
-            ${orderColumnName} ${orderDir}
-            limit
-            #{start},#{length}
-        </if>
+        <include refid="page"/>
+    </select>
+    <select id="retrieveAllFollowCount" resultType="java.lang.Long">
+        select count(*) from record_share
+        <where>
+            ( pk_person in
+            (select follow_pk_person from im_person_follow b where b.pk_person=#{pk_person}) OR
+            pk_person = #{pk_person} )
+            <include refid="ifWhere"/>
+        </where>
+    </select>
+    <select id="retrieveAllFollowWithPage" resultType="com.houoy.app.smarthealth.vo.RecordShareVO">
+        SELECT *,1 as has_follow FROM record_share
+        <where>
+            ( pk_person in
+            (select follow_pk_person from im_person_follow b where b.pk_person=#{pk_person}) OR
+            pk_person = #{pk_person} )
+            <include refid="ifWhere"/>
+        </where>
+        <include refid="page"/>
+    </select>
+    <select id="retrieveAllUnFollowCount" resultType="java.lang.Long">
+        select count(*) from record_share
+        <where>
+            ( pk_person not in
+            (select follow_pk_person from im_person_follow b where b.pk_person=#{pk_person}) AND
+            pk_person &lt;&gt; #{pk_person} )
+            <include refid="ifWhere"/>
+        </where>
+    </select>
+    <select id="retrieveAllUnFollowWithPage" resultType="com.houoy.app.smarthealth.vo.RecordShareVO">
+        SELECT *,0 as has_follow FROM record_share
+        <where>
+            ( pk_person not in
+            (select follow_pk_person from im_person_follow b where b.pk_person=#{pk_person}) AND
+            pk_person &lt;&gt; #{pk_person} )
+            <include refid="ifWhere"/>
+        </where>
+        <include refid="page"/>
     </select>
 
     <insert id="saveByVO" parameterType="com.houoy.app.smarthealth.vo.RecordShareVO">

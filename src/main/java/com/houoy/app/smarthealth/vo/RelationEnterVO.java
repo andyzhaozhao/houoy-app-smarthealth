@@ -4,6 +4,8 @@ import com.houoy.common.vo.SuperVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * 报名关系表，如果双方都报名（都付款成功），则进入活动表（等待，正在进行，结束），活动成功表，活动失败表（未报名）
  * @author andyzhao
