@@ -38,7 +38,9 @@
     </select>
 
     <select id="retrieveAllCount" resultType="java.lang.Long">
-        select count(*) from <include refid="tableName"/>
+        SELECT count(*) FROM im_person_follow a
+        LEFT JOIN im_person b on a.pk_person = b.pk_person
+        LEFT JOIN im_person c on a.follow_pk_person = c.pk_person
         <where>
             <include refid="ifWhere"/>
         </where>
