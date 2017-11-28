@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.houoy.app.smarthealth.dao.UserMapper">
+    <sql id="ifWhere">
+        <if test="user_code!=null and user_code!=''">
+            and user_code like "%${user_code}%"
+        </if>
+        <if test="user_name != null and user_name !=''">
+            and user_name like "%${user_name}%"
+        </if>
+    </sql>
     <select id="retrieveByPK" resultType="java.util.Map">
 
     </select>
@@ -9,16 +17,14 @@
     </select>
     <select id="retrieveAllCount" resultType="java.lang.Long">
         select count(*) from sm_user
+        <where>
+            <include refid="ifWhere"/>
+        </where>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.common.vo.UserVO">
         select * from sm_user
         <where>
-            <if test="user_code!=null and user_code!=''">
-                and user_code like "%${user_code}%"
-            </if>
-            <if test="user_name != null and user_name !=''">
-                and user_name like "%${user_name}%"
-            </if>
+            <include refid="ifWhere"/>
         </where>
         order by
         ${orderColumnName} ${orderDir}

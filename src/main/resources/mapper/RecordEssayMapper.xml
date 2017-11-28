@@ -48,6 +48,9 @@
 
     <select id="retrieveAllCount" resultType="java.lang.Long">
         select count(*) from record_essay
+        <where>
+            <include refid="ifWhere"/>
+        </where>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RecordEssayVO">
         select * from record_essay

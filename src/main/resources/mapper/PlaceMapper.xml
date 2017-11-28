@@ -39,6 +39,9 @@
 
     <select id="retrieveAllCount" resultType="java.lang.Long">
         select count(*) from im_place
+        <where>
+            <include refid="ifWhere"/>
+        </where>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.PlaceVO">
         select * from im_place

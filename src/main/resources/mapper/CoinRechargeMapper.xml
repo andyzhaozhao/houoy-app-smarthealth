@@ -35,20 +35,26 @@
         <include refid="columnNames"/>
         from
         <include refid="tableName"/>
-         ORDER BY recharge_code
+        ORDER BY recharge_code
     </select>
 
-    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.CoinRechargeVO" parameterType="java.util.List">
+    <select id="retrieveByParentPK" resultType="com.houoy.app.smarthealth.vo.CoinRechargeVO"
+            parameterType="java.util.List">
 
     </select>
 
     <select id="retrieveAllCount" resultType="java.lang.Long">
-        select count(*) from <include refid="tableName"/>
+        select count(*) from
+        <include refid="tableName"/>
+        <where>
+            <include refid="ifWhere"/>
+        </where>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.CoinRechargeVO">
         select
         <include refid="columnNames"/>
-        from <include refid="tableName"/>
+        from
+        <include refid="tableName"/>
         <where>
             <include refid="ifWhere"/>
         </where>
@@ -78,7 +84,7 @@
 
     <delete id="deleteByPK">
         delete from
-         <include refid="tableName"/>
+        <include refid="tableName"/>
         where pk_recharge=#{pk_recharge}
     </delete>
 
@@ -86,7 +92,7 @@
         delete from
         <include refid="tableName"/>
 
-      where
+        where
         <foreach collection="list" item="item" index="index"
                  open="(" separator="or" close=")">
             pk_recharge = #{item}

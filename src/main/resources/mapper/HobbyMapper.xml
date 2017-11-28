@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.houoy.app.smarthealth.dao.HobbyMapper">
+    <sql id="ifWhere">
+        <if test="hobby_code!=null and hobby_code!=''">
+            and hobby_code like "%${hobby_code}%"
+        </if>
+        <if test="hobby_name != null and hobby_name !=''">
+            and hobby_name like "%${hobby_name}%"
+        </if>
+        <if test="hobby_desc != null and hobby_desc !=''">
+            and hobby_desc like "%${hobby_desc}%"
+        </if>
+    </sql>
     <select id="retrieveByPK" resultType="java.util.Map">
 
     </select>
@@ -9,19 +20,14 @@
     </select>
     <select id="retrieveAllCount" resultType="java.lang.Long">
         select count(*) from im_hobby
+        <where>
+            <include refid="ifWhere"/>
+        </where>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.HobbyVO">
         select * from im_hobby
         <where>
-            <if test="hobby_code!=null and hobby_code!=''">
-                and hobby_code like "%${hobby_code}%"
-            </if>
-            <if test="hobby_name != null and hobby_name !=''">
-                and hobby_name like "%${hobby_name}%"
-            </if>
-            <if test="hobby_desc != null and hobby_desc !=''">
-                and hobby_desc like "%${hobby_desc}%"
-            </if>
+            <include refid="ifWhere"/>
         </where>
         order by
         ${orderColumnName} ${orderDir}

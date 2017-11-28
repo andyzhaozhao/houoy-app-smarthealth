@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.houoy.app.smarthealth.dao.PersonMapper">
+    <sql id="ifWhere">
+        <if test="pk_person!=null and pk_person!=''">
+            and pk_person = #{pk_person}
+        </if>
+        <if test="password!=null and password!=''">
+            and password = #{password}
+        </if>
+        <if test="person_code!=null and person_code!=''">
+            and person_code = #{person_code}
+        </if>
+        <if test="person_name != null and person_name !=''">
+            and person_name like "%${person_name}%"
+        </if>
+        <if test="person_alias != null and person_alias !=''">
+            and person_alias like "%${person_alias}%"
+        </if>
+        <if test="mobile != null and mobile !=''">
+            and mobile = #{mobile}
+        </if>
+        <if test="email != null and email !=''">
+            and email = #{email}
+        </if>
+        <if test="age != null and age !=''">
+            and age = #{age}
+        </if>
+    </sql>
+
     <select id="retrieveByPK" resultType="java.util.Map">
 
     </select>
@@ -9,34 +36,14 @@
     </select>
     <select id="retrieveAllCount" resultType="java.lang.Long">
         select count(*) from im_person
+        <where>
+            <include refid="ifWhere"/>
+        </where>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.PersonVO">
         select * from im_person
         <where>
-            <if test="pk_person!=null and pk_person!=''">
-                and pk_person = #{pk_person}
-            </if>
-            <if test="password!=null and password!=''">
-                and password = #{password}
-            </if>
-            <if test="person_code!=null and person_code!=''">
-                and person_code = #{person_code}
-            </if>
-            <if test="person_name != null and person_name !=''">
-                and person_name like "%${person_name}%"
-            </if>
-            <if test="person_alias != null and person_alias !=''">
-                and person_alias like "%${person_alias}%"
-            </if>
-            <if test="mobile != null and mobile !=''">
-                and mobile = #{mobile}
-            </if>
-            <if test="email != null and email !=''">
-                and email = #{email}
-            </if>
-            <if test="age != null and age !=''">
-                and age = #{age}
-            </if>
+            <include refid="ifWhere"/>
         </where>
         <if test="orderColumnName != null and orderDir !=''and start !='' and length !=''" >
             order by

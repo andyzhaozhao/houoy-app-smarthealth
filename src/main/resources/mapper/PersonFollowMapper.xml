@@ -15,7 +15,17 @@
     <sql id="tableName">
         im_person_follow
     </sql>
-
+    <sql id="ifWhere">
+        <if test="pk_person!=null and pk_person!=''">
+            and a.pk_person = #{pk_person}
+        </if>
+        <if test="person_name!=null and person_name!=''">
+            and b.person_name like "%${person_name}%"
+        </if>
+        <if test="follow_person_name!=null and follow_person_name!=''">
+            and c.person_name like "%${follow_person_name}%"
+        </if>
+    </sql>
     <select id="retrieveByPK" resultType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO">
 
     </select>
@@ -29,22 +39,18 @@
 
     <select id="retrieveAllCount" resultType="java.lang.Long">
         select count(*) from <include refid="tableName"/>
+        <where>
+            <include refid="ifWhere"/>
+        </where>
     </select>
     <select id="retrieveAllWithPage" resultType="com.houoy.app.smarthealth.vo.RelationFollowPersonVO">
         SELECT a.*,b.person_name ,c.person_name as follow_person_name FROM im_person_follow a
         LEFT JOIN im_person b on a.pk_person = b.pk_person
         LEFT JOIN im_person c on a.follow_pk_person = c.pk_person
         <where>
-            <if test="pk_person!=null and pk_person!=''">
-                and a.pk_person = #{pk_person}
-            </if>
-            <if test="person_name!=null and person_name!=''">
-                and b.person_name like "%${person_name}%"
-            </if>
-            <if test="follow_person_name!=null and follow_person_name!=''">
-                and c.person_name like "%${follow_person_name}%"
-            </if>
+            <include refid="ifWhere"/>
         </where>
+
         <if test="orderColumnName != null and orderDir !='' and start !='' and length !=''" >
             order by
             ${orderColumnName} ${orderDir}
