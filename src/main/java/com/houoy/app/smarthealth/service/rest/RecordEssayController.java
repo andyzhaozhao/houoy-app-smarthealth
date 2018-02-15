@@ -47,14 +47,14 @@ public class RecordEssayController extends BaseController<RecordEssayVO, RecordE
     @ApiOperation(value = "分页查询阅读记录")
     @ApiImplicitParam(name = "recordEssayVO", value = "阅读记录信息", required = true, paramType = "body", dataType = "RecordEssayVO")
     @GetMapping(value = "retrieve")
-    public JquryDataTablesVO<RecordEssayVO> retrieve(RecordEssayVO recordEssayVO, HttpServletRequest request) {
-        return super.retrieve(recordEssayVO, request);
+    public JquryDataTablesVO<RecordEssayVO> retrieveJquryDT(RecordEssayVO recordEssayVO, HttpServletRequest request) {
+        return super.retrieveJquryDT(recordEssayVO, request);
     }
 
     @ApiOperation(value = "移动端分页查询阅读记录")
     @GetMapping(value = "retrieveMobile")
-    public PageResultVO retrieveMobile(RecordEssayVO recordEssayVO, HttpServletRequest request) {
-        return super.retrieveMobile(recordEssayVO, request);
+    public PageResultVO retrieve(RecordEssayVO recordEssayVO, HttpServletRequest request) {
+        return super.retrieve(recordEssayVO, request);
     }
 }
 

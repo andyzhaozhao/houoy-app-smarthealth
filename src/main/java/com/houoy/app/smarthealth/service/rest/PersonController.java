@@ -3,7 +3,6 @@ package com.houoy.app.smarthealth.service.rest;
 import com.houoy.app.smarthealth.ImageUtil;
 import com.houoy.app.smarthealth.config.NginxConfig;
 import com.houoy.app.smarthealth.service.PersonService;
-import com.houoy.app.smarthealth.vo.PersonImageVO;
 import com.houoy.app.smarthealth.vo.PersonVO;
 import com.houoy.common.utils.SftpUtils;
 import com.houoy.common.vo.JquryDataTablesVO;
@@ -78,25 +77,25 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
             @ApiImplicitParam(name = "vo", value = "用户信息", required = true, paramType = "body", dataType = "PersonVO")
     })
     @GetMapping(value = "retrieve")
-    public JquryDataTablesVO<PersonVO> retrieve(PersonVO vo, HttpServletRequest request) {
-        return super.retrieve(vo, request);
+    public JquryDataTablesVO<PersonVO> retrieveJquryDT(PersonVO vo, HttpServletRequest request) {
+        return super.retrieveJquryDT(vo, request);
     }
 
     @ApiOperation(value = "移动端分页查询用户信息")
     @GetMapping(value = "retrieveMobile")
-    public PageResultVO retrieveMobile(PersonVO personVO, HttpServletRequest request) {
-        return super.retrieveMobile(personVO, request);
+    public PageResultVO retrieve(PersonVO personVO, HttpServletRequest request) {
+        return super.retrieve(personVO, request);
     }
 
     @ApiOperation(value = "通过手机端上传用户头像")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pk_person", value = "用户PK", required = true, dataType = "string",paramType = "query"),
+            @ApiImplicitParam(name = "pk_person", value = "用户PK", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "image", value = "图片的base64字符串", required = true, dataType = "string", paramType = "body")
     })
-    @PostMapping(value = "/uploadMobile" , produces = "application/json;charset=utf-8")
-    public RequestResultVO uploadMobile(String pk_person,@RequestBody String image) throws IOException {
+    @PostMapping(value = "/uploadMobile", produces = "application/json;charset=utf-8")
+    public RequestResultVO uploadMobile(String pk_person, @RequestBody String image) throws IOException {
         RequestResultVO resultVO = new RequestResultVO();
-        String file = image ;
+        String file = image;
 
         if (!StringUtils.isEmpty(pk_person) && !StringUtils.isEmpty(file)) {
             //流式传输直接用pk_person
@@ -117,7 +116,7 @@ public class PersonController extends BaseController<PersonVO, PersonService> {
                 resultVO.setSuccess(true);
                 resultVO.setMsg("保存成功");
                 resultVO.setResultData(true);
-            }else{
+            } else {
                 resultVO.setSuccess(false);
                 resultVO.setMsg("保存失败");
             }

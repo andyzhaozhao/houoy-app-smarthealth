@@ -47,8 +47,8 @@ public class PersonNoteController extends BaseController<PersonNoteVO, PersonNot
     @ResponseBody
     @RequestMapping(value = "retrieve")
     @Override
-    public JquryDataTablesVO<PersonNoteVO> retrieve(PersonNoteVO vo, HttpServletRequest request) {
-        return super.retrieve(vo, request);
+    public JquryDataTablesVO<PersonNoteVO> retrieveJquryDT(PersonNoteVO vo, HttpServletRequest request) {
+        return super.retrieveJquryDT(vo, request);
     }
 }
 

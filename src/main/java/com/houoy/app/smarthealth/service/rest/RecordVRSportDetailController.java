@@ -46,8 +46,8 @@ public class RecordVRSportDetailController extends BaseController<RecordVRSportD
     @ApiOperation(value = "分页查询运动详细记录")
     @ApiImplicitParam(name = "recordVRSportDetailVO", value = "运动记录信息", required = true, paramType = "body", dataType = "RecordVRSportDetailVO")
     @GetMapping(value = "retrieve")
-    public JquryDataTablesVO<RecordVRSportDetailVO> retrieve(RecordVRSportDetailVO recordVRSportDetailVO, HttpServletRequest request) {
-        return super.retrieve(recordVRSportDetailVO, request);
+    public JquryDataTablesVO<RecordVRSportDetailVO> retrieveJquryDT(RecordVRSportDetailVO recordVRSportDetailVO, HttpServletRequest request) {
+        return super.retrieveJquryDT(recordVRSportDetailVO, request);
     }
 }
 

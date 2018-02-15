@@ -55,14 +55,14 @@ public class PersonFollowController extends BaseController<RelationFollowPersonV
             @ApiImplicitParam(name = "vo", value = "关注关系信息", required = true, paramType = "body", dataType = "RelationFollowPersonVO")
     })
     @GetMapping(value = "retrieve")
-    public JquryDataTablesVO<RelationFollowPersonVO> retrieve(RelationFollowPersonVO vo, HttpServletRequest request) {
-        return super.retrieve(vo, request);
+    public JquryDataTablesVO<RelationFollowPersonVO> retrieveJquryDT(RelationFollowPersonVO vo, HttpServletRequest request) {
+        return super.retrieveJquryDT(vo, request);
     }
 
     @ApiOperation(value = "移动端分页查询阅读记录")
     @GetMapping(value = "retrieveMobile")
-    public PageResultVO retrieveMobile(RelationFollowPersonVO relationFollowPersonVO, HttpServletRequest request) {
-        return super.retrieveMobile(relationFollowPersonVO, request);
+    public PageResultVO retrieve(RelationFollowPersonVO relationFollowPersonVO, HttpServletRequest request) {
+        return super.retrieve(relationFollowPersonVO, request);
     }
 }
 

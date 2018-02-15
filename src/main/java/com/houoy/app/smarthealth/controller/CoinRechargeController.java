@@ -47,8 +47,8 @@ public class CoinRechargeController extends BaseController<CoinRechargeVO, CoinR
     @ResponseBody
     @RequestMapping(value = "retrieve")
     @Override
-    public JquryDataTablesVO<CoinRechargeVO> retrieve(CoinRechargeVO vo, HttpServletRequest request) {
-        return super.retrieve(vo, request);
+    public JquryDataTablesVO<CoinRechargeVO> retrieveJquryDT(CoinRechargeVO vo, HttpServletRequest request) {
+        return super.retrieveJquryDT(vo, request);
     }
 }
 

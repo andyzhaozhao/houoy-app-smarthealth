@@ -55,8 +55,8 @@ public class RecordShareController extends BaseController<RecordShareVO, RecordS
     @ApiOperation(value = "分页查询用户分享记录")
     @ApiImplicitParam(name = "recordShareVO", value = "用户分享记录信息", required = true, paramType = "body", dataType = "RecordShareVO")
     @GetMapping(value = "retrieve")
-    public JquryDataTablesVO<RecordShareVO> retrieve(RecordShareVO recordShareVO, HttpServletRequest request) {
-        return super.retrieve(recordShareVO, request);
+    public JquryDataTablesVO<RecordShareVO> retrieveJquryDT(RecordShareVO recordShareVO, HttpServletRequest request) {
+        return super.retrieveJquryDT(recordShareVO, request);
     }
 
     @ApiOperation(value = "移动端分页查询阅读记录")
@@ -86,7 +86,7 @@ public class RecordShareController extends BaseController<RecordShareVO, RecordS
         pageResultVO.setLength(recordShareVO.getLength());
         pageResultVO.setOrderColumnName(recordShareVO.getOrderColumnName());
         pageResultVO.setOrderDir(recordShareVO.getOrderDir());
-        pageResultVO.setTotal(count + "");
+        pageResultVO.setTotal(count);
         return pageResultVO;
     }
 

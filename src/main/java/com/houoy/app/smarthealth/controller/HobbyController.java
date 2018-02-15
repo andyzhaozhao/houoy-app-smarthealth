@@ -47,8 +47,8 @@ public class HobbyController extends BaseController<HobbyVO, HobbyService> {
     @ResponseBody
     @RequestMapping(value = "retrieve")
     @Override
-    public JquryDataTablesVO<HobbyVO> retrieve(HobbyVO vo, HttpServletRequest request) {
-        return super.retrieve(vo, request);
+    public JquryDataTablesVO<HobbyVO> retrieveJquryDT(HobbyVO vo, HttpServletRequest request) {
+        return super.retrieveJquryDT(vo, request);
     }
 }
 
